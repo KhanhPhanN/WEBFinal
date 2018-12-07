@@ -1,0 +1,44 @@
+<!-- <% var i=0  %>
+<% var j=0  %> -->
+<% include template/body1 %>
+<div id = "container">
+    <!-- header starts here-->
+<% include template/header %>
+<div id ="container_inner">
+    <!-- nav starts here-->
+<div id="container_inner_nav">
+<div id="container_inner_nav-inner">
+<% include template/nav %>
+</div>
+</div>
+    <!-- content starts here -->
+<div id = "container_inner_content">
+<div id ="container_inner_content-inner">
+
+
+    <div class="title-sp">
+       Danh sách sản phẩm
+      </div>
+      <div class="cuon-1" id =" frame-1">
+        <table class="table-listproduct">
+                <tr class="table-listproduct">
+                   <%if(ketqua.length == 0) { %>
+                    <h2>Không tìm thấy username</h2>
+                   <%} else { ketqua.forEach((data)=>{%>
+                    <li style="font-size:1.5em;"><a href="/listproduct/<%-data.username%>"><%= data.username %></a></li>
+                    <%})}%>
+                </tr>
+        </table>
+      </div>
+
+
+</div>
+</div>
+</div>
+    <!-- footer starts here-->
+<div id = "container_inner_footer">
+<% include template/footer %>
+</div>
+</div>
+<% include template/body2 %>
+

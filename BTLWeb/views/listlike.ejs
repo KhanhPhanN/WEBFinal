@@ -1,0 +1,50 @@
+<!-- <% var i=0  %>
+<% var j=0  %> -->
+<% include template/body1 %>
+<div id = "container">
+    <!-- header starts here-->
+<% include template/header %>
+<div id ="container_inner">
+    <!-- nav starts here-->
+<div id="container_inner_nav">
+<div id="container_inner_nav-inner">
+<% include template/nav %>
+</div>
+</div>
+    <!-- content starts here -->
+<div id = "container_inner_content">
+<div id ="container_inner_content-inner">
+
+
+    <div class="title-sp">
+       Danh sách sản phẩm
+      </div>
+      <div class="cuon-1" id =" frame-1">
+        <table class="table-listproduct">
+                <tr class="table-listproduct">
+                    <% if(kq.length==0){%>
+                     <h2>Bạn chưa thích sản phẩm nào </h2>
+                  <% } else {  %>
+                    <div>Số sản phẩm đã thích: <%-kq.length%></div>
+                    <%kq.forEach((data)=>{%>
+                    <th style="display:inline-block;" class="table-listproduct">
+                    <a href="/sp/sp/<%-data._id%>*<%-user.username%>">  <img src="/image/<%= data.image %>" alt="" width="160px" height="160px"></a><br>
+                        <span class ="ten" id = "ten-1"><%= data.name%></span><br>
+                        <span class ="gia" id = "gia-1"><%= data.price%></span><br>    
+                    </th>
+                  <% })} %>
+                </tr>
+        </table>
+      </div>
+
+
+</div>
+</div>
+</div>
+    <!-- footer starts here-->
+<div id = "container_inner_footer">
+<% include template/footer %>
+</div>
+</div>
+<% include template/body2 %>
+

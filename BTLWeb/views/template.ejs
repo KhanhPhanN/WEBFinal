@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+    <head>
+        <title>
+            app read books
+        </title>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/js/jqurey.js"></script>
+        <script src="/js/chucnang.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="/css/footer.css" type="text/css" >   
+        <link rel="stylesheet" href="/css/template.css" type="text/css" >  
+        <link rel="stylesheet" href="/css/body.css" type="text/css" >  
+        <link rel="stylesheet" href="/css/header.css" type="text/css" >  
+        <link rel="stylesheet" href="/css/DinhDang.css" type="text/css" >  
+        <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" > 
+        <style>
+            #btn-report,#send-report{
+                padding:5px;
+                border: none;
+               box-shadow: 0 2px gray;
+                border-radius:5px;
+                margin-bottom:5px;
+                background-color: #f16e8e;
+color: aliceblue;
+            }
+            .text-report{
+                width:200px;
+                display:none;
+            }
+           
+            #textarea{
+                padding:5px;
+            }
+            #send-report{
+                margin-left:58px;
+            }
+            #listlike{
+                list-style: none
+            }
+            #right{
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 15px;
+                font-weight: normal
+                
+            }
+            #listlike{
+                height: 100px;
+                overflow: auto
+            }
+            #right #name{
+
+color: #000;
+font-size: 24px;
+
+            }
+        </style>
+    </head>
+    <body>
+<div id = "container">
+    <!-- header starts here-->
+<% include template/header %>
+<div id ="container_inner">
+    <!-- nav starts here-->
+<div id="container_inner_nav">
+<div id="container_inner_nav-inner">
+<% include template/nav %>
+</div>
+</div>
+    <!-- content starts here -->
+<div id = "container_inner_content">
+<div id ="container_inner_content-inner">
+    <div id ="san-pham">
+        <div class="container">
+                <table class="row">
+                    <tr>
+                 <th id = "left"> <div class="col-sm-4">
+                         
+                              <div class="card card-body mb-3">
+                            
+                                  <img id="image"src="/image/<%= data.image %>" alt="" width="300px" height="300px">
+                           
+                              </div><br>
+                              <div id="report">
+                              <button id="btn-report">report sản phẩm</button>
+
+                              <% if(user) { %>
+                                <div class="text-report">
+                                    <form method="POST" action="">
+                                        
+                                        <select style="height: 40px;" id="subject">Subject: 
+                                            <option value="Sản phẩm không đúng mô tả">Sản phẩm không đúng mô tả</option>
+                                            <option value="Người bán không phản hồi tốt">Người bán không phản hồi tốt</option>
+                                            <option value="Spam">Spam</option>
+                                            <option value="Khác">Khác</option>
+                                        </select>
+                                        
+                                       
+                                        <textarea id="textarea" rows="5" cols="35" placeholder="Mô tả"></textarea>
+                                        <input type="button" value="send" id="send-report">
+                                    </form>
+                                </div>
+                                <div id="thanks-report" style="display:none;">
+                                    <p>Cảm ơn sự góp ý của bạn!</p>
+                                </div>
+                              <% } %>
+                              <% if(!user){ %>
+                                <div class="text-report" style="margin-top:5px;margin-left:23px;">Bạn hãy đăng nhập để report về sản phẩm</div>
+                              <% }%>
+                            </div>
+                                
+                  
+                  </div></th>
+                  <th id="right">
+                      <div class="col-sm-6">
+                    <span id="name"><%- data.name %></span><br>
+                    <div class="stars-sp">
+                        <form action="">
+                          <input class="star-sp star-sp-5" id="star-sp-5" type="radio" name="star-sp"/>
+                          <label class="star-sp star-sp-5" for="star-sp-5"></label>
+                          <input class="star-sp star-sp-4" id="star-sp-4" type="radio" name="star-sp" checked/>
+                          <label class="star-sp star-sp-4" for="star-sp-4"></label>
+                          <input class="star-sp star-sp-3" id="star-sp-3" type="radio" name="star-sp"/>
+                          <label class="star-sp star-sp-3" for="star-sp-3"></label>
+                          <input class="star-sp star-sp-2" id="star-sp-2" type="radio" name="star-sp"/>
+                          <label class="star-sp star-sp-2" for="star-sp-2"></label>
+                          <input class="star-sp star-sp-1" id="star-sp-1" type="radio" name="star-sp"/>
+                          <label class="star-sp star-sp-1" for="star-sp-1"></label>
+                        </form>
+                      </div><br>
+                    <span id="price"  style="border-bottom: 1px solid gray"><%- data.price %></span><br>
+                    <label> Sản phẩm bán từ shop: </label>
+                    <%if(user){%>
+                    <span id="shop"> <a href="/user/other/<%-data.shop%>&&<%-user.username%>"><%- data.shop %></a></span><br>
+                    <%}else{%>
+                        <span id="shop"><%- data.shop %></span><br>
+                        <%}%>
+                        <label> Thương lượng: </label>
+                        <span id="bargain"><%- data.bargain %></span><br>
+                    <label>Số sản phẩm: </label>
+
+                    <span id="code"><%- data._id %></span><hr>
+
+                    <label><img src="/imagei/nhan.png" width="15px" height="15px"style="padding-right: 5px">Nhãn hiệu: </label>
+                    <span id="label"><%- data.label %> </span><br>
+                    <label><img src="/imagei/trangthai.png" width="15px" height="15px"style="padding-right: 5px">Trạng thái: </label>
+                    <span id="state"><%- data.state %> </span><br>
+                    <label><img src="/imagei/dm.png" width="15px" height="15px"style="padding-right: 5px">Danh mục: </label>
+                    <span id="attached"><%- data.attached %></span><br>
+                    <label><img src="/imagei/can.png" width="15px" height="15px"style="padding-right: 5px">Khối lượng: </label>
+                    <span id="weight"><%- data.weight %></span><br>
+                    <label><img src="/imagei/tag.png" width="15px" height="15px"style="padding-right: 5px">Tag: </label>
+                    <span id="weight"><%- data.name %>, <%- data.shop%>,<%-data.attached%></span><br>
+                  
+                    <%if(user){%>
+                    <input id = "tenuser" type="text" value="<%-user.username%>" hidden >
+                    <%if(!checklike){%>
+                    <i id = "numlike"><%- like%></i><img id="like" src="/imagei/like.png" width="40px" height="40px">
+                    <ul id = "listlike">
+                        <%likelist.forEach(function(data){%>
+                        <li><%-data%></li>
+                            <%})%>
+                    </ul>
+                    <%}else{%>
+                        <i id = "numlike"><%- like%></i><img id="like" src="/imagei/like1.png" width="40px" height="40px">
+                        <div id = "listlike">
+                            <%likelist.forEach(function(data){%>
+                            <li><%-data%></li>
+                                <%})%>
+                            </div>
+                        <%}%>
+                    <%}%><br>
+                    <button style="background-color: #f16e8e; width: 150px; height: 50px; color: floralwhite; text-align: center; box-shadow: 5px 5px 5px #666; border: none">MUA NGAY</button>
+                  </div>
+                </th>
+                </tr>
+                </table>
+              </div>
+        <div class="option">
+            <ul>
+                <li id="mota-title" onclick="mota()">Mô tả</li>
+                <li id="binhluan-title" onclick="binhluan()">Đánh giá/Bình luận</li>
+            </ul>
+        </div>
+        <textarea id="mota" cols="120" rows="20" style="border: none; background-color: white" disabled><%-data.describle %></textarea>
+       </div>
+       <%if(user){%>
+       <div id="binhluan">
+           <h4>Viết bình luận</h4>
+           <p id="name-comment"><%-user.username%>: </p>
+            <textarea rows="5" cols="30" name="description" placeholder="Viết bình luận" id = "Comment"></textarea>
+            <input type="button" id="send" value="Send">
+            <textarea rows="5" cols="50" name="description" placeholder="Bình luận" id = "showcomment" disabled><%-data.comment%></textarea>
+       </div>
+       <%}%>
+       <%if(!user){%>
+           <div id="ht">Bạn hãy đăng nhập để bình luận về sản phẩm</div>
+        <%}%>
+        <div id="withshop">
+        <div class="option-shop">Sản phẩm từ shop:     <li><%if(user){%>
+            <span id="shop"> <a href="/user/other/<%-data.shop%>&&<%-user.username%>"><%- data.shop %></a></span> <label class="pn"> <button><i class="fa fa-angle-left" id="Previous-shop" data-toggle="tooltip" data-placement="top"></button></i><button> <i class="fa fa-angle-right" id="Next-shop" data-toggle="tooltip" data-placement="top"></i></button></label><br>
+            <%}else{%>
+                <span id="shop"><%- data.shop %></span><label class="pn"><button><i class="fa fa-angle-left" id="Previous-shop" data-toggle="tooltip" data-placement="top"></i></button><button> <i class="fa fa-angle-right" id="Next-shop" data-toggle="tooltip" data-placement="top"></i></button></label><br>
+                <%}%></li></div>
+            </div> 
+                <div>
+                <table id="table_shop">
+                        <tr>
+                          
+         <%for(var i=0;i<withshop.length;i++){%>
+             <%if(i<4){%>
+            <th class="slide-shop" stt-shop="<%-i%>">
+                <span class="card card-body mb-3">
+                    <%if(user){%>
+                <a href="/sp/sp/<%-SP[i]._id%>*<%-user.username%>">  <img src="/image/<%= withshop[i].image %>" alt="" width="160px" height="180px"></a><br>
+            <%}else{%>
+            <a href="/sp/sp/<%-SP[i]._id%>*">  <img src="/image/<%= withshop[i].image %>" alt="" width="160px" height="180px"></a><br>
+            
+            <%}%>
+            </span>
+            <span class ="ten" id = "ten-1"><%= withshop[i].name%></span><br>
+            <div class="stars">
+                <form action="">
+                  <input class="star star-5" id="star-5" type="radio" name="star" checked/>
+                  <label class="star star-5" for="star-5"></label>
+                  <input class="star star-4" id="star-4" type="radio" name="star"/>
+                  <label class="star star-4" for="star-4"></label>
+                  <input class="star star-3" id="star-3" type="radio" name="star"/>
+                  <label class="star star-3" for="star-3"></label>
+                  <input class="star star-2" id="star-2" type="radio" name="star"/>
+                  <label class="star star-2" for="star-2"></label>
+                  <input class="star star-1" id="star-1" type="radio" name="star"/>
+                  <label class="star star-1" for="star-1"></label>
+                </form>
+              </div><br>
+            <span class ="gia" id = "gia-1"><%= withshop[i].price%></span>
+            </th>
+            <%}else{%>
+
+                <th class="slide-shop" stt-shop="<%-i%>" hidden>
+                        <span class="card card-body mb-3">
+                            <%if(user){%>
+                        <a href="/sp/sp/<%-SP[i]._id%>*<%-user.username%>">  <img src="/image/<%= withshop[i].image %>" alt="" width="160px" height="180px"></a>
+                    <%}else{%>
+                    <a href="/sp/sp/<%-SP[i]._id%>*">  <img src="/image/<%= withshop[i].image %>" alt="" width="160px" height="180px"></a>
+                    
+                    <%}%>
+                    </span>
+                    <span class ="ten" id = "ten-1"><%= withshop[i].name%></span><br>
+                    <div class="stars">
+                        <form action="">
+                          <input class="star star-5" id="star-5" type="radio" name="star" checked/>
+                          <label class="star star-5" for="star-5"></label>
+                          <input class="star star-4" id="star-4" type="radio" name="star"/>
+                          <label class="star star-4" for="star-4"></label>
+                          <input class="star star-3" id="star-3" type="radio" name="star"/>
+                          <label class="star star-3" for="star-3"></label>
+                          <input class="star star-2" id="star-2" type="radio" name="star"/>
+                          <label class="star star-2" for="star-2"></label>
+                          <input class="star star-1" id="star-1" type="radio" name="star"/>
+                          <label class="star star-1" for="star-1"></label>
+                        </form>
+                      </div><br>
+                    <span class ="gia" id = "gia-1"><%= withshop[i].price%></span>
+                    </th>
+
+                <%}%>
+            <%}%>
+           
+        </tr>
+    </table>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<% include template/footer %>
+</div>
+</div>
+<% include template/body2 %>
+<script>
+$(".wrapper-nav1").hide();
+$("#bia").hide();
+</script>
