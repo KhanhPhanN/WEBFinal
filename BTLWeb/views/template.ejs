@@ -78,7 +78,7 @@ font-size: 24px;
                          
                               <div class="card card-body mb-3">
                             
-                                  <img id="image"src="/image/<%= data.image %>" alt="" width="300px" height="300px">
+                                  <img id="image"src="/image/<%= data.image %>"  data-zoom-image="/image/<%= data.image %>" alt="" width="300px" height="300px">
                            
                               </div><br>
                               <div id="report">
@@ -280,7 +280,18 @@ font-size: 24px;
 </div>
 </div>
 <% include template/body2 %>
+<script src="/js/jquery.elevateZoom-3.0.8.min.js"></script>
+<script src="/js/jquery.elevatezoom.js"></script>
 <script>
 $(".wrapper-nav1").hide();
 $("#bia").hide();
+$("#image").elevateZoom({
+    responsive: true,
+    zoomWindowWidth: 300,
+    zoomWindowHeight:300,
+zoomWindowFadeIn: 100,
+zoomWindowFadeOut: 100,
+scrollZoom: true,
+
+});
 </script>

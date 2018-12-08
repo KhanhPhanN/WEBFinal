@@ -49,8 +49,11 @@ form p {
         <div class="headings">
           <h5>Đăng ký </h5>
         </div><hr>
+        <%if(msg){%>
+      <div style="color: red"><%-msg%></div>
+          <%}%>
         <div class="content">
-          <form action="/update_register" encoding="" class="form-horizontal form-validate" id="UserRegisterForm" method="post" enctype="multipart/form-data" onsubmit="return checkPhoneNumber()"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	
+          <form action="/update_register" encoding="" class="form-horizontal form-validate" id="UserRegisterForm" method="post" enctype="multipart/form-data"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	
                <label>Avatar</label> <label  class="col-sm-3 control-label" id="lb-avatar"><img src="/imagei/photo.png"><br><input name="Avatar" id="avatar" type="file" accept="image/png, image/jpeg,image/gif,image/jpg" ></label>
                 <div id="show-photo" class="preview"><p>Chưa tải ảnh</p></div>
             
@@ -58,26 +61,26 @@ form p {
           <div class="form-group">
             <div class="col-sm-6">
           <input type="text" name="sdt" value="<%-sdt%>" hidden>
-              <div class="input number required"><label class="col-sm-3 control-label">Email:</label><input name="Email" class="form-control" placeholder="Xin vui lòng nhập email" type="email"  required="required" aria-required="true" aria-invalid="true"></div>	
+              <div class="input number required"><label class="col-sm-3 control-label">Email:</label><input name="Email" class="form-control" placeholder="Xin vui lòng nhập email" type="email"  required="required" ></div>	
                                             </div>
               </div>
               <div class="form-group">
                 <div class="col-sm-6">
-                  <div class="input password required">  <label class="col-sm-3 control-label">User name:</label><input name="username" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập tên tài khoản" data-rule-required="true" data-msg-required="Vui lòng nhập mật khẩu" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ và số" data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" id="username" required="required"/></div>										</div>
+                  <div class="input password required">  <label class="col-sm-3 control-label">User name:</label><input name="username" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập tên tài khoản" type="text" id="username" required="required"/></div>										</div>
                 </div>
 
                 <div class="form-group">
                         <div class="col-sm-6">
-                          <div class="input number required"><label class="col-sm-3 control-label">First name:</label><input  name="First" class="form-control" placeholder="Xin vui lòng nhập first name" autofocus="autofocus" value="" data-rule-required="true" data-msg-required="Vui lòng nhập số điện thoại của bạn" data-rule-number="true" data-msg-number="Xin vui lòng nhập số" data-rule-minlength="10" data-msg-minlength="Số điện thoại từ 10 - 11 ký tự" data-rule-maxlength="11" data-msg-maxlength="Số điện thoại từ 10 - 11 ký tự" type="text"  required="required" aria-required="true" aria-invalid="true"></div>	
+                          <div class="input number required"><label class="col-sm-3 control-label">First name:</label><input  name="First" class="form-control" placeholder="Xin vui lòng nhập first name"  type="text"  required="required" ></div>	
                                                         </div>
                           </div>
                           <div class="form-group">
                             <div class="col-sm-6">
-                              <div class="input password required">  <label class="col-sm-3 control-label">Last name:</label><input name="Last" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập last name" data-rule-required="true" data-msg-required="Vui lòng nhập last name" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ " data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" id="last" required="required"/></div>										</div>
+                              <div class="input password required">  <label class="col-sm-3 control-label">Last name:</label><input name="Last" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập last name" type="text" id="last" required="required"/></div>										</div>
                             </div>
                             <div class="form-group">
                                     <div class="col-sm-6">
-                                      <div class="input number required"><label class="col-sm-3 control-label">Adress:</label><input name="Address" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập địa chỉ" data-rule-required="true" data-msg-required="Vui lòng nhập địa chỉ" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ hoặc số" data-rule-minlength="6" data-msg-minlength=" tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength=" tối đa 30 ký tự" type="text" id="address" required="required"/></div>	
+                                      <div class="input number required"><label class="col-sm-3 control-label">Adress:</label><input name="Address" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập địa chỉ" type="text" id="address" required="required"/></div>	
                                                                     </div>
                                       </div>
                                       <div class="form-group">
@@ -85,7 +88,7 @@ form p {
                                           <div class="input password required">  <label class="col-sm-3 control-label">City:</label><input name="City" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập thành phố"   type="text" id="city" required="required"/></div>										</div>
                                         </div>                 
                 
-                    <input id ="btdk" class="btn btn-default text-right" type="submit" value="Cập nhật thông tin	">									
+                    <input class="btn btn-default text-right" type="submit" value="Cập nhật thông tin	">									
               
                     </form>									</div>
               </div>

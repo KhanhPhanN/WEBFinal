@@ -148,7 +148,7 @@
                       </div>
                     </div>
             </div>
-            <form action="/edit_products" method="POST">
+         
             <div class="add">
                <input type="text" name= "image" value="<%=data.image%>" hidden>
                 <div style="display:inline;">
@@ -164,21 +164,21 @@
                <div style="display: flex">
                    <p style="font-size:1em;font-weight:bold;">Miễn phí</p>
                    <label class="switch" id="switch1">
-                        <input type="checkbox" checked name="bargainproduct1">
+                        <input type="checkbox" checked name="bargainproduct1" id="bargainproduct1">
                         <span class="slider round"></span>
                     </label>
                </div><hr>
                <div style="display: flex">
                 <p style="font-size:1em;font-weight:bold;">Bán nhanh</p>
                 <label class="switch" id="switch">
-                     <input type="checkbox" unchecked name="bargainproduct2">
+                     <input type="checkbox" unchecked name="bargainproduct2" id="bargainproduct2">
                      <span class="slider round"></span>
                  </label>
             </div><hr>
                <div style="display: flex" >
                     <p style="font-size:1em;font-weight:bold;">Cho phép mặc cả</p>
                     <label class="switch" id="switch2">
-                            <input type="checkbox" unchecked name="bargainproduct3">
+                            <input type="checkbox" unchecked name="bargainproduct3" id="bargainproduct3">
                             <span class="slider round"></span>
                     </label>
                 </div><hr>
@@ -188,21 +188,21 @@
                   <div style="display: flex">
                       <p style="font-size:1em;font-weight:bold;">Miễn phí</p>
                       <label class="switch" id="switch1">
-                           <input type="checkbox" unchecked name="bargainproduct1">
+                           <input type="checkbox" unchecked name="bargainproduct1" id="bargainproduct1">
                            <span class="slider round"></span>
                        </label>
                   </div><hr>
                   <div style="display: flex">
                    <p style="font-size:1em;font-weight:bold;">Bán nhanh</p>
                    <label class="switch" id="switch">
-                        <input type="checkbox" checked name="bargainproduct2">
+                        <input type="checkbox" checked name="bargainproduct2" id="bargainproduct2">
                         <span class="slider round"></span>
                     </label>
                </div><hr>
                   <div style="display: flex" >
                        <p style="font-size:1em;font-weight:bold;">Cho phép mặc cả</p>
                        <label class="switch" id="switch2">
-                               <input type="checkbox" unchecked name="bargainproduct3">
+                               <input type="checkbox" unchecked name="bargainproduct3" id="bargainproduct3">
                                <span class="slider round"></span>
                        </label>
                    </div><hr>
@@ -212,21 +212,21 @@
                     <div style="display: flex">
                         <p style="font-size:1em;font-weight:bold;">Miễn phí</p>
                         <label class="switch" id="switch1">
-                             <input type="checkbox" unchecked name="bargainproduct1">
+                             <input type="checkbox" unchecked name="bargainproduct1" id="bargainproduct1">
                              <span class="slider round"></span>
                          </label>
                     </div><hr>
                     <div style="display: flex">
                      <p style="font-size:1em;font-weight:bold;">Bán nhanh</p>
                      <label class="switch" id="switch">
-                          <input type="checkbox" unchecked name="bargainproduct2">
+                          <input type="checkbox" unchecked name="bargainproduct2" id="bargainproduct2">
                           <span class="slider round"></span>
                       </label>
                  </div><hr>
                     <div style="display: flex" >
                          <p style="font-size:1em;font-weight:bold;">Cho phép mặc cả</p>
                          <label class="switch" id="switch2">
-                                 <input type="checkbox" checked name="bargainproduct3">
+                                 <input type="checkbox" checked name="bargainproduct3" id="bargainproduct3">
                                  <span class="slider round"></span>
                          </label>
                      </div><hr>
@@ -234,7 +234,7 @@
                 <div id="product-detail">
                     <label style="font-size:1em;font-weight:bold;">Chi tiết sản phẩm </label><br><hr>
                     <label id="product-category"> <img src="/imagei/danhmuc.png" width="15px" height="15px" style="padding-right: 5px"> Danh mục</label>
-                    <input type="text" name="name" id="product-category-name" value="<%=data.attached%>"><br><hr>
+                    <input type="text" name="attached" id="product-category-name" value="<%=data.attached%>"><br><hr>
 
                     <label id="product-state"> <img src="/imagei/status.png" width="15px" height="15px" style="padding-right: 5px"> Trạng thái</label>
                     <input type="text" name="state" id="product-category-state" value="<%=data.state%>"><br><hr>
@@ -313,19 +313,18 @@
                   <div style="display:flex">
                     <div>
                       <input type="text" value="<%= user.username%>" name ="nameuser" hidden>
-                      <input   type="text" value="<%= data.attached%>" name ="attached" hidden>
-                      <input   type="text" value="<%= data._id%>" name ="filename" hidden>
-                      <input  class="button button2" type="submit" name="Chỉnh sửa" value="Chỉnh sửa">
+                      <input  type="text" value="<%= data.attached%>" name ="attached" hidden>
+                      <input  id="filename"  type="text" value="<%= data._id%>" name ="filename" hidden>
+                      <button  id="edit_product" class="button button2">Chỉnh sửa</button>
                     </div>
                   </div>
             </div>
             </div>
-          </form>
+         
           <form action="/del_product?_method=DELETE" method="POST">
-            <input type="text" value="<%= user.username%>" name ="nameuser" hidden>
+            <input   type="text" value="<%= user.username%>" name ="nameuser" hidden>
             <input   type="text" value="<%= data.image%>" name ="delete" hidden>
-            <input   type="text" value="<%= data.attached%>" name ="delete1" hidden>
-            <input  class="button button3" type="submit" name="Xóa sản phẩm" value="Xóa sản phẩm" >
+            <input   class="button button3" type="submit" name="Xóa sản phẩm" value="Xóa sản phẩm" >
  
        </form>
           </div>

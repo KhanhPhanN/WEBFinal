@@ -179,10 +179,14 @@ setInterval(function(){$("#Next").click()},2000)
     $("#send-report").click(function(){
         //socket.emit("report",{ subject: $("#subject").val(),Describle:  $("#textarea").val()});
         $.post("/report_products",{product_id: $("#code").html(), subject: $("#subject").val(), details: $("#textarea").val()}, function(data, status){
+            if(data.code=="5"){
+                alert(data.data);
+            }else{
+            
             $(".text-report").slideUp();
             $("#thanks-report").fadeTo(2500,1).fadeOut(2500);
             $("#textarea").val("");
-
+            }
         })
        })
         if ($('.wrapper-nav').length > 0) {
@@ -293,8 +297,8 @@ $("#dangki").click(function(){
 $("#btdk").click(function(){
 $.post("/signup",{PhoneNumber: $("#input").val(), password: $("#password").val()},function(data,status){
 if(data.code=="5"){
-    $(".register-validator").html(data.data);
-    $(".register-validator").show();
+    alert(data.data);
+ 
 }
 else{
     window.location.href = "/sms_verify";
@@ -308,7 +312,7 @@ var sdt;
 $("#code_verify").click(function(){
     $.post("/sms_verify",{code: $("#UserCodeVerify").val()},function(data, status){
 if(data.code=="5"){
-    $("#error-code").html(data.message);
+    alert(data.data);
 }else{
     sdt=data.data.phone;
     window.location.href = "/updatelogin";
@@ -319,7 +323,7 @@ if(data.code=="5"){
 $("#btfg").click(function(){
     $.post("/create_code_reset_password",{phonenumber: $("#input").val()},function(data,status){
     if(data.code=="1005"){
-   $("#err-fg").html(data.message);
+   alert(data.data);
     }
     else{
         window.location.href = "/resetPassword";
@@ -331,6 +335,7 @@ $("#btfg").click(function(){
     $("#btre").click(function(){
         $.post("/reset_Password",{codeReset: $("#input").val(),resetPassword: $("#password").val(),resetPassword2: $("#password2").val()},function(data,status){
         if(data.code=="5"){
+            $("#err-fg").html("");
             for(var i=0;i<data.data.length;i++)
           { var err="<p>"+data.data[i].msg+"</p><br>"
            $("#err-fg").append(err);
@@ -348,8 +353,9 @@ $("#btfg").click(function(){
 $("#btcp").click(function(){
     $.post("/changePassword",{id: $("#p-change").val(),oldPassword: $("#input").val(),newPassword: $("#password").val(),newPassword2: $("#password2").val()},function(data,status){
     if(data.code=="5"){
+        $("#err-fg").html("");
         for(var i=0;i<data.data.length;i++)
-      { var err="<p>"+data.data[i].msg+"</p><br>"
+      { var err="<p>"+data.data[i]+"</p><br>"
        $("#err-fg").append(err);
     }
     }
@@ -359,7 +365,15 @@ $("#btcp").click(function(){
     })
     })
 
-
+// Chỉnh sửa product
+var x = {nameproduct: $("#textinput").val(), describleproduct: $("#textarea").val(), bargainproduct1: $("#bargainproduct1").val(), bargainproduct2: $("#bargainproduct2").val(), bargainproduct3: $("#bargainproduct3"), attached: $("#product-category-name").val(), state: $("#product-category-state").val(), label: $("#product-category-label").val(), weight: $("#product-category-weight").val(), sell: $("#product-place-sell").val(), price: $("#product-price-input").val(), filename: $("#filename").val()}
+console.log(x)
+  $("#edit_product").click(function(){
+    
+      $.post("/edit_products",{nameproduct: $("#textinput").val(), describleproduct: $("#textarea").val(), bargainproduct1: $("#bargainproduct1").val(), bargainproduct2: $("#bargainproduct2").val(), bargainproduct3: $("#bargainproduct3").val(), attached: $("#product-category-name").val(), state: $("#product-category-state").val(), label: $("#product-category-label").val(), weight: $("#product-category-weight").val(), sell: $("#product-place-sell").val(), price: $("#product-price-input").val(), filename: $("#filename").val()},function(data, status){
+alert(data.data);
+  })
+  })
 
 
 
@@ -403,7 +417,6 @@ function checkPhoneNumber() {
             }
         }
     }
-    alert("Loi")
     return flag;
 }
 function checkPassword(){

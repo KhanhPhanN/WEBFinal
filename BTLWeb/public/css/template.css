@@ -364,6 +364,14 @@ overflow-x: hidden;
 	   text-align: center;
        cursor: pointer;
 	}
+	.btn{
+		height: 30px;
+		width: 425px;
+		background-color: #f16e8e;
+		color: white;
+		text-align: center;
+		cursor: pointer;
+	}
 	#code_verify{
 		height: 30px;
 		width: 400px;
