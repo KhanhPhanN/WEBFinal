@@ -56,7 +56,7 @@ function checkPassword(temp){
     }
     return 0;
 }
-var ascii ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-:()%., áàạảãâấầậẩẫăắằặẳẵÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴéèẹẻẽêếềệểễÉÈẸẺẼÊẾỀỆỂỄóòọỏõôốồộổỗơớờợởỡÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠúùụủũưứừựửữÚÙỤỦŨƯỨỪỰỬỮíìịỉĩÍÌỊỈĨđĐýỳỵỷỹÝỲỴỶỸ\r\n"
+var ascii ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-:()%., áàạảãâấầậẩẫăắằặẳẵÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴéèẹẻẽêếềệểễÉÈẸẺẼÊẾỀỆỂỄóòọỏõôốồộổỗơớờợởỡÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠúùụủũưứừựửữÚÙỤỦŨƯỨỪỰỬỮíìịỉĩÍÌỊỈĨđĐýỳỵỷỹÝỲỴỶỸ\r\n\r\n"
 // viet ham check input va text area nhap vao
 function checkInput(temp){
     if(temp){
@@ -951,7 +951,20 @@ var dbo = db.db("databaseofmoki");
 dbo.collection("users").findOne({_id: mongoose.Types.ObjectId(user_id)},function(e,r){
 if(e) throw r;
 if(r){
-    user=r;
+    dbo.collection("TempSP").find({shop: r.username, attached: category_id}).toArray(function(er, re){
+        if(er)  throw er;
+        for(var i=index;i<re.length;i++){
+           if(i-index<count){
+            datare.push(re[i]);
+           }else{
+               break;
+           }
+        }
+    })
+    dbo.collection("TempSP").find().toArray(function(er,ress){
+        if(er) throw er;
+        res.json({code: "1000", message: "OK", data: datare})
+    })
 }
 else {
     res.json({code: "5", message: 'Failed', data: "Không tìm thấy user"})
@@ -960,26 +973,29 @@ else {
 })
 
 })
-Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
-if(err) throw err;
-var dbo = db.db("databaseofmoki");
-if(user){
-dbo.collection("TempSP").find({shop: user.username, attached: category_id}).toArray(function(er, re){
-    if(er)  throw er;
-    for(var i=index;i<re.length;i++){
-       if(i-index<count){
-        datare.push(re[i]);
-       }else{
-           break;
-       }
-    }
-})
-dbo.collection("TempSP").find().toArray(function(er,ress){
-    if(er) throw er;
-    res.json({code: "1000", message: "OK", data: datare})
-})
-}
-})
+// Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
+// if(err) throw err;
+// var dbo = db.db("databaseofmoki");
+
+// if(user){
+// dbo.collection("TempSP").find({shop: user.username, attached: category_id}).toArray(function(er, re){
+//     if(er)  throw er;
+//     for(var i=index;i<re.length;i++){
+//        if(i-index<count){
+//         datare.push(re[i]);
+//        }else{
+//            break;
+//        }
+//     }
+// })
+// dbo.collection("TempSP").find().toArray(function(er,ress){
+//     if(er) throw er;
+//     res.json({code: "1000", message: "OK", data: datare})
+// })
+// }else{
+//     res.json({code: "5", message: "Faied", data: "Không tồn tại "})
+// }
+//})
 }else{
 res.json({code: "5", message: "Faied", data: "Input không đúng"})
 }
