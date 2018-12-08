@@ -19,6 +19,17 @@
         width: 18px;
         height: 18px;  
       }
+      #add_image tr td #lb-avatar{
+          background-color: rgb(182, 181, 181);
+          background-image: url(../imagei/photo.png);
+          background-repeat: no-repeat;
+          background-position-x: 20px;
+          background-position-y: 20px;
+      }
+      #add_image tr td #show-photo{
+          background-color: rgb(182, 181, 181);
+          margin-bottom: 15px;
+      }
     </style>
 </head>
 <body>
@@ -149,35 +160,21 @@
             <div id="wrapper-addsp">
                 <div class="container">
                     <div class="row">
-                      <div class="wrapper-image1">
+                      <div class="wrapper-image1" style="margin-left: 200px">
                         <h1 class="text-center display-4 my-4">Thêm ảnh</h1>
-                        <form action="/upload" method="POST" enctype="multipart/form-data">
-                          <div class="custom-file mb-3">
-                            <input type="file" name="file" id="file" class="custom-file-input">
-                          </div>
-                          <input type="submit" value="Submit" class="btn-primary">
-                        </form>
-                        <hr>
-                        <% if(files){ %>
-                          <% files.forEach(function(file) { %>
-                            <div class="card card-body mb-3">
-                              <% if(file.isImage) { %>
-                                <img src="image/<%= file.filename %>" alt="">
-                                <% } else { %>
-                                  <%= file.filename %>
-                                    <% } %>
-                                      <form method="POST" action="/files/<%= file._id %>?_method=DELETE">
-                                        <button class="btn btn-danger btn-block mt-4">Delete</button>
-                                      </form>
-                            </div>
-                            <% }) %>
-                              <% } else { %>
-                                <p>No files to show</p>
-                                <% } %>
+                        <form action="/add_product" method="POST" enctype="multipart/form-data">
+                          <table id="add_image">
+                              <tr>
+                                  <td ><label id="lb-avatar" style="height: 90px; width: 90px; float: right;"><br><input name="file" id="avatar" type="file" accept="image/png, image/jpeg,image/gif,image/jpg" ></label></td>
+                                  <td>
+                                    <div id="show-photo" class="preview" style="height: 90px; width: 90px"><p>Chưa tải ảnh</p></div>
+                                  </td>
+                              </tr>
+                          </table>
                       </div>
                     </div>
             </div>
-            <form action="/add_product" method="POST">
+         
             <div class="add">
                
                 <div style="display:inline;">
@@ -476,6 +473,7 @@ function uploadimage(){
 }
 </script>
 <script>
+<<<<<<< HEAD
 
     //check ten san pham
 
@@ -533,5 +531,49 @@ function checkName(){
       }
     }
         }
+=======
+    var input = document.querySelector('#avatar');
+    var preview = document.querySelector('.preview');
+    input.style.opacity = 0;
+    input.addEventListener('change', updateImageDisplay);
+    function updateImageDisplay() {
+      while(preview.firstChild) {
+        preview.removeChild(preview.firstChild);
+      }
+      var curFiles = input.files;
+      if(curFiles.length === 0) {
+        var para = document.createElement('p');
+        para.textContent = 'No files currently selected for upload';
+        preview.appendChild(para);
+      } else {
+        var list = document.createElement('p');
+        preview.appendChild(list);
+        for(var i = 0; i < curFiles.length; i++) {
+            var image = document.createElement('img');
+            image.src = window.URL.createObjectURL(curFiles[i]);
+            image.style.height = "90px";
+            image.style.width = "90px";
+          list.appendChild(image);
+        }
+      }
+    }
+    var fileTypes = [
+      'image/jpeg',
+      'image/pjpeg',
+      'image/png'
+    ]
+    
+    function validFileType(file) {
+      for(var i = 0; i < fileTypes.length; i++) {
+        if(file.type === fileTypes[i]) {
+          return true;
+        }
+      }
+      return false;
+    }
+    function showResponse(response){
+        alert(response)
+    }
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
     </script>
 </html> 

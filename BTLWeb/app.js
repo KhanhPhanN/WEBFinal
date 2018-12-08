@@ -17,7 +17,7 @@ var scanf = require("sscanf");
 // set database
 var mongo = require('mongodb');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/loginapp');
+mongoose.connect('mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1');
 var db = mongoose.connection;
 var List_user_connected=[];
 // init app
@@ -45,7 +45,7 @@ var loi;
 // check loi
 var ascII ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 // viet ham check password nhap vao
-function checkLanguage(temp){
+function checkPassword(temp){
     if(temp.length < 6) return 1;//"Mật khẩu phải lớn hơn hoặc bằng 6 kí tự";
     else{
         for(var i=0; i<temp.length; i++){
@@ -56,12 +56,31 @@ function checkLanguage(temp){
     }
     return 0;
 }
-var ascii ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_"
+var ascii ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-:()%., áàạảãâấầậẩẫăắằặẳẵÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴéèẹẻẽêếềệểễÉÈẸẺẼÊẾỀỆỂỄóòọỏõôốồộổỗơớờợởỡÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠúùụủũưứừựửữÚÙỤỦŨƯỨỪỰỬỮíìịỉĩÍÌỊỈĨđĐýỳỵỷỹÝỲỴỶỸ\r\n\r\n"
 // viet ham check input va text area nhap vao
 function checkInput(temp){
+    if(temp){
     for(var i=0; i<temp.length; i++){
         var check = temp.substring(i,i+1);
-        if(ascII.indexOf(check) == -1)
+        var x ="."
+        if((ascii.indexOf(check) == -1 )) 
+       {
+           console.log("Vị trí "+i+" Phần tử: "+check);
+            return  1;//"input chỉ được chứa chữ cái viết hoa,viết thường hoặc số";
+       }
+    }
+    return 0;
+}else{
+    return 1;
+}
+}
+
+
+var asciii ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890@."
+function checkEmail(temp){
+    for(var i=0; i<temp.length; i++){
+        var check = temp.substring(i,i+1);
+        if(asciii.indexOf(check) == -1)
         return  1;//"input chỉ được chứa chữ cái viết hoa,viết thường hoặc số";
     }
     return 0;
@@ -70,25 +89,38 @@ function checkInput(temp){
 
 //Check phone
 function checkPhoneNumber(phone) {
-    var flag = false;
-    phone = phone.replace('(+84)', '0');
-    phone = phone.replace('+84', '0');
+    if (phone.length!=0) {
     phone = phone.replace('84', '0');
-    phone = phone.replace('0084', '0');
+    phone = phone.replace('+84', '0');
     phone = phone.replace(/ /g, '');
-    if (phone != '') {
         var firstNumber = phone.substring(0, 2);
         if ((firstNumber == '09' || firstNumber == '08'|| firstNumber == '03') && phone.length == 10) {
             if (phone.match(/^\d{10}/)) {
-                return true;
+                return 0;
             }
         } else if (firstNumber == '01' && phone.length == 11) {
             if (phone.match(/^\d{11}/)) {
-                return true;
+                return 0;
             }
         }
     }
-    return flag;
+    return 1;
+}
+
+
+//check vode
+
+function checkCode(code){
+var inclu = "1234567890";
+if(code.length!=4){
+    return 1;
+}else{
+for(var i=0;i<4;i++){
+    if(inclu.indexOf(code[i])==-1)
+    return 1
+}
+}
+return 0;
 }
 
 // set the views
@@ -110,7 +142,7 @@ app.use(session({
 }));
 
 
-const mongoURI = 'mongodb://localhost:27017/uploadfiles';
+const mongoURI = 'mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1uploadfiles';
 
 // Create mongo connection
 const conn = mongoose.createConnection(mongoURI);
@@ -162,16 +194,16 @@ app.use(expressValidator({
 var dsproduct=[];
 
   var Mongo = require('mongodb').MongoClient;
-  Mongo.connect("mongodb://localhost:27017/",function(err,db){
-      var dbo = db.db("loginapp")
+  Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
+      var dbo = db.db("databaseofmoki")
 dbo.collection("users").find().toArray(function(err,res){
     for(var i=0;i<res.length;i++)
     list_user.push(res[i].username)
 })
 db.close();
   })
-  Mongo.connect("mongodb://localhost:27017/",function(err,db){
-      var dbo = db.db("mydb")
+  Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
+      var dbo = db.db("databaseofmoki")
 dbo.collection("TempSP").find().toArray(function(err,res){
 dsproduct=res;
     db.close();
@@ -203,8 +235,10 @@ app.post('/signup', (req, res) => {
     var password = req.body.password;
 password1 = password;
 PhoneNumber1 = PhoneNumber;
-if(checkLanguage(password)!=0  ){
-    res.json({code: "5",message:"Falied",data: "Số điện thoại hoặc mật khẩu không đúng định dạng"})
+var checkphone = checkPhoneNumber(PhoneNumber);
+var checkpassword = checkPassword(password);
+if(checkphone!=0 || checkpassword !=0 ){
+    res.json({code: "5",message:"Falied",data: "Số điện thoại hoặc mật khẩu không đúng"})
 }else{
         //checking for email and username are already taken
             User.findOne({PhoneNumber: {
@@ -230,6 +264,8 @@ app.get("/sms_verify",function(req,res){
 })
 app.post('/sms_verify', function(req,res){
      var code1 = req.body.code;
+     var checkcode = checkCode(code1);
+     if(checkcode==0){
     if(code == code1){
         var newUser = new User({
             email: "",
@@ -248,14 +284,14 @@ app.post('/sms_verify', function(req,res){
         });
         User.createUser(newUser, function (err, user) {
             if (err) throw err;
-           // res.render('updatelogin',{user: user,msg: false});
             res.json({code: "1000", message: "OK", data: user});
         });
     }else{
-        //res.render('Confirm',{dt: code})
-        res.json({code: "5", message: "Failed", data: ""})
+        res.json({code: "5", message: "Failed", data: "Sai mã code"})
     }
-
+}else{
+    res.json({code: "5", message: "Failed", data: "Mã code gồm 4 chữ số"})
+}
 })
 
 // forget Password
@@ -275,7 +311,7 @@ var storage2=multer.diskStorage({
 
 
 app.get("/updatelogin",function(req,res){
-    res.render("updatelogin",{sdt: PhoneNumber1});
+    res.render("updatelogin",{msg: false,sdt: PhoneNumber1});
 })
 var upload2 = multer({storage: storage2});
 app.post("/update_register",upload2.single("Avatar"),function(req,res1){
@@ -286,11 +322,22 @@ var First = req.body.First;
 var Last = req.body.Last;
 var address = req.body.Address;
 var City = req.body.City;
+var checkphone = checkPhoneNumber(phone);
+var checkusername = checkInput(username);
+var checkemail = checkEmail(email);
+var checkfirst = checkInput(First);
+var checklast = checkInput(Last);
+var checkaddress = checkInput(address);
+var checkcity = checkInput(City);
+
+if(checkphone!=0 || checkusername!=0 ||  checkemail!=0 ||  checkfirst!=0 ||  checklast!= 0||  checkaddress!=0 || checkcity !=0){
+    res1.render("updatelogin",{msg: "Dữ liệu nhập vào không đúng",sdt: PhoneNumber1})   
+} else{
 var MongoClient = require('mongodb').MongoClient;
-var url='mongodb://localhost:27017/';
+var url='mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1';
 MongoClient.connect(url,function(err,db){
     if(err) throw err;
-    var dbo = db.db("loginapp");
+    var dbo = db.db("databaseofmoki");
     var where ={PhoneNumber : phone};
     var c = false;
     var query={$set: {avatar: avatarimg, email:email,username: username,firstname: First,lastname: Last, address: address, city: City}};
@@ -300,36 +347,39 @@ MongoClient.connect(url,function(err,db){
        for(var i=0;i<res.length;i++){
         if(res[i].username==username){
             c=true;
-            //res1.render("updatelogin",{msg: "Tài khoản đã tồn tại",user: res})  
-            res1.json({code: "5", message: "Falied", data: "Tài khoản đã tồn tại"});
+            res1.render("updatelogin",{msg: "Tài khoản đã tồn tại",sdt: PhoneNumber1})  
+            // res1.json({code: "5", message: "Falied", data: "Tài khoản đã tồn tại"});
             break;
         }
        }
        if(!c){
            dbo.collection("users").updateOne(where,query,function(err,res){
                if(err) throw err;
-              // res1.render("login")
-              res1.json({code: "1000", message: "OK", data: ""})
+               res1.render("login")
+            //   res1.json({code: "1000", message: "OK", data: ""})
            })
           }
        db.close();
     })
  
     })
-   
+}
 })
 
 var phoneInput;
 app.post('/create_code_reset_password',function(req,res){
  phoneInput = req.body.phonenumber;
+ var checkphone = checkPhoneNumber(phoneInput);
+ if(checkphone!=0){
+    res.json({code: "1005", message:"Unknown error", data: "Số điện thoại không đúng"})
+ }else{
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     MongoClient.connect(url,function(err,db){
-        var dbo = db.db("loginapp")
+        var dbo = db.db("databaseofmoki")
         if(err){
-            console.log("connect failed!");
+            res.json({code: "1001", message: "Can not connect to DB"})
         }else{
-            console.log("connected to database");
             dbo.collection('users').find({PhoneNumber:phoneInput}).toArray(function(err,user){
                 if(err) throw err;
                 if(user.length > 0){
@@ -341,14 +391,14 @@ app.post('/create_code_reset_password',function(req,res){
                       
                 }else{
                     //res.redirect('forgetPassword');
-                    res.json({code: "1005", message:"Unknown error", data: ""})
+                    res.json({code: "1005", message:"Unknown error", data: "Không tồn tại số điện thoại"})
                 }
                db.close(); 
              });
         }
      
        });
-       
+    }
     });
       
 app.get("/resetPassword", function(req,res){
@@ -362,29 +412,33 @@ app.post('/reset_Password',function(req,res){
     var resetPassword2 = req.body.resetPassword2;
     var codeReset = req.body.codeReset;
 
-    // check errors
-    req.checkBody('resetPassword','Nhập mật khẩu mới!').notEmpty();
-    req.checkBody('resetPassword2','Nhập lại mật khẩu yêu cầu!').notEmpty();
-    req.checkBody('resetPassword2','Mật khẩu không khớp!').equals(req.body.resetPassword);
-    req.checkBody('codeReset','Nhập mã code xác nhận!').notEmpty();
-      //code1.toString();
-    req.checkBody('codeReset','Mã xác nhận không đúng!').equals(code1.toString());
-    console.log(code1);
-    var errors = req.validationErrors();
 
-    if(errors){
-        // res.render('resetPassword',{
-        //     errors:errors
-        // })
-        console.log(errors)
-        res.json({code: "5", message: "Failed",data:errors})
+    console.log(code1);
+    var checkpassword = checkPassword(resetPassword);
+    var checkpassword2 = checkPassword(resetPassword2);
+    var checkcode = checkCode(codeReset);
+    var err =[];
+    if(checkpassword!=0 || checkpassword2 != 0 ){
+       err.push({msg: "Mật khẩu không đúng"})
+    }
+    if(checkcode!=0){
+        err.push({msg: "Mã xác nhận không đúng"})
+    }
+    if( checkpassword==0 && checkpassword2 == 0 && (resetPassword!=resetPassword2)){
+        err.push({msg: "Mật khẩu không khớp"})
+    }
+    if(checkpassword==0 && checkpassword2 == 0 && checkcode==0 && (codeReset!=code1.toString()) ){
+        err.push({msg: "Mã xác nhận không đúng"})
+    }
+    if(err.length!=0){
+        res.json({code: "5", message: "Failed",data:err})
     }else{
         var MongoClient = require('mongodb').MongoClient;
-        var url = "mongodb://127.0.0.1:27017/";
+        var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 
         MongoClient.connect(url, function(err, db) {
          if (err) throw err;
-         var dbo = db.db("loginapp");
+         var dbo = db.db("databaseofmoki");
         var password = {PhoneNumber: phoneInput}
         //bcrypt 
         var user ;
@@ -469,16 +523,16 @@ var chuoi2 = Y2.split(" ");
 }
 app.get("/moki.vn/:id",function(req,res){
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 var key = req.params.id;
 var data = new Array();
 var data_num = new Array();
 if(key=="Be-an"){
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("mydb");
+        var dbo = db.db("databaseofmoki");
         var re = {name: key};
-        dbo.collection("Bé ăn").find().toArray( function(err, result) {
+        dbo.collection("TempSP").find({attached: "Bé ăn"}).toArray( function(err, result) {
           if (err) throw err;
           res.render("searchpage",{kq: result,SP:dsproduct.reverse(),title: "Bé ăn"})
           db.close();
@@ -488,9 +542,9 @@ if(key=="Be-an"){
 else if(key=="Be-mac"){
         MongoClient.connect(url, function(err, db) {
             if (err) throw err;
-            var dbo = db.db("mydb");
+            var dbo = db.db("databaseofmoki");
             var re = {name: key};
-            dbo.collection("Bé mặc").find().toArray( function(err, result) {
+            dbo.collection("TempSP").find({attached: "Bé mặc"}).toArray( function(err, result) {
               if (err) throw err;
               res.render("searchpage",{kq: result,SP:dsproduct.reverse(),title: "Bé mặc"})
               db.close();
@@ -500,9 +554,9 @@ else if(key=="Be-mac"){
 else if(key=="Be-ngu"){
             MongoClient.connect(url, function(err, db) {
                 if (err) throw err;
-                var dbo = db.db("mydb");
+                var dbo = db.db("databaseofmoki");
                 var re = {name: key};
-                dbo.collection("Bé ngủ").find().toArray( function(err, result) {
+                dbo.collection("TempSP").find({attached: "Bé ngủ"}).toArray( function(err, result) {
                   if (err) throw err;
                   res.render("searchpage",{kq: result,SP:dsproduct.reverse(),title: "Bé ngủ"})
                   db.close();
@@ -512,9 +566,9 @@ else if(key=="Be-ngu"){
 else if(key=="Be-tam"){
                 MongoClient.connect(url, function(err, db) {
                     if (err) throw err;
-                    var dbo = db.db("mydb");
+                    var dbo = db.db("databaseofmoki");
                     var re = {name: key};
-                    dbo.collection("Bé tắm").find().toArray( function(err, result) {
+                    dbo.collection("TempSP").find({attached: "Bé tắm"}).toArray( function(err, result) {
                       if (err) throw err;
                       res.render("searchpage",{kq: result,SP:dsproduct.reverse(),title: "Bé tắm"})
                       db.close();
@@ -524,9 +578,9 @@ else if(key=="Be-tam"){
 else if(key=="Be-ve-sinh"){
                     MongoClient.connect(url, function(err, db) {
                         if (err) throw err;
-                        var dbo = db.db("mydb");
+                        var dbo = db.db("databaseofmoki");
                         var re = {name: key};
-                        dbo.collection("Bé vệ sinh").find().toArray( function(err, result) {
+                        dbo.collection("TempSP").find({attached: "Bé vệ sinh"}).toArray( function(err, result) {
                           if (err) throw err;
                           res.render("searchpage",{kq: result,SP:dsproduct.reverse(),title: "Bé vệ sinh"})
                           db.close();
@@ -537,7 +591,7 @@ else{
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("mydb");
+        var dbo = db.db("databaseofmoki");
         var re = {name: key};
         dbo.collection("TempSP").find().toArray( function(err, result) {
           if (err) throw err;
@@ -572,12 +626,16 @@ else{
 
 app.post("/get_my_likes",function(req,res){
 var username = req.body.username;
+var checkusername = checkInput(username);
+if(checkusername!=0){
+    res.json({code: "5", message: "Failed", data: "Tên user không đúng "})
+}else{
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  var dbo = db.db("mydb");
+  var dbo = db.db("databaseofmoki");
   dbo.collection("TempSP").find().toArray(function(err, result) {
     if (err) throw err;
     var likelis = [];
@@ -591,7 +649,7 @@ MongoClient.connect(url, function(err, db) {
     db.close();
   });
 });
-
+}
 
 })
 
@@ -600,36 +658,64 @@ app.post("/get_comment_products", function(req,res){
 var product_id = req.body.product_id;
 var index = req.body.index;
 var count = req.body.count;
-Mongo.connect("mongodb://localhost:27017/",function(err, db){
+var ch = "0123456789";
+var check = false;
+for(var i =0;i<index.length;i++){
+if(ch.indexOf(index[i])==-1){
+check = true;
+break;
+}
+}
+for(var i =0;i<count.length;i++){
+    if(ch.indexOf(count[i])==-1){
+    check = true;
+    break;
+    }
+    }
+if(!check){
+Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err, db){
 if(err) throw err;
-var dbo = db.db("mydb");
+var dbo = db.db("databaseofmoki");
 dbo.collection("TempSP").findOne({_id: product_id}, function(er, result){
 if(!result)
 res.json({code: "5", message: "Failed", data: "Không tìm thấy sản phẩm"})
 else{
     res.json({code: "1000", message: "OK", data: result.comment})
-
-
 }
 })
-
-
-
 })
-
+    }
+    else{
+        res.json({code: "5", message: "Failed", data: "Input không đúng"})
+    }
 })
 
 
 
 app.post("/get_list_followed", function(req, res){
-console.log(req.user);
 var user_id = req.body.user_id;
 var index = req.body.index;
 var count = req.body.count;
+var ch = "0123456789";
+var check = false;
+for(var i =0;i<index.length;i++){
+if(ch.indexOf(index[i])==-1){
+check = true;
+break;
+}
+}
+for(var i =0;i<count.length;i++){
+    if(ch.indexOf(count[i])==-1){
+    check = true;
+    break;
+    }
+}
+if(!user_id) check = true;
+if(!check){
 var data_followed=[];
-Mongo.connect("mongodb://localhost:27017/", function(err, db){
+Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1", function(err, db){
 if(err) throw err;
-var dbo = db.db("loginapp");
+var dbo = db.db("databaseofmoki");
 dbo.collection("users").findOne({_id: mongoose.Types.ObjectId(user_id)}, function(er, result){
     if(!result){
         res.json({code: "1000", message: "OK", data: "Không tìm thấy thông tin user"});
@@ -644,9 +730,7 @@ dbo.collection("users").findOne({_id: mongoose.Types.ObjectId(user_id)}, functio
         if(re.be_follow.indexOf(result.username)!=-1)
         followed=1;
         data_followed.push({id: re._id, username: re.username, avatar: re.avatar, followed: followed});
-      
     })
-      
    }else{
        break;
    }
@@ -658,9 +742,10 @@ dbo.collection("users").findOne({_id: mongoose.Types.ObjectId(user_id)}, functio
    
     }
 })
-
-
 })
+}else{
+res.json({code: "5", message: "Falied", data: "Input không đúng"})
+}
 })
 
 
@@ -668,9 +753,15 @@ app.post("/report_products", function(req,res){
 var product_id = req.body.product_id;
 var subject = req.body.subject;
 var describle =  req.body.details;
-Mongo.connect("mongodb://localhost:27017/",function(err,db){
+var checksubject = checkInput(subject);
+var checkdescrible = checkInput(describle);
+if(!product_id || checksubject !=0 || checkdescrible !=0){
+    res.json({code: "5", message: "Failed", data: "Mô tả không đúng"})
+}
+else{
+Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
 if(err) throw err;
-var dbo = db.db("mydb");
+var dbo = db.db("databaseofmoki");
 dbo.collection("TempSP").findOne({_id: product_id}, function(x, result){
 if(x) throw x;
 if(!result)
@@ -686,16 +777,34 @@ db.close()
 })
 
 })
+}
 })
 app.post("/get_list_following", function(req, res){
 
     var user_id = req.body.user_id;
     var index = req.body.index;
     var count = req.body.count;
+
+var ch = "0123456789";
+var check = false;
+for(var i =0;i<index.length;i++){
+if(ch.indexOf(index[i])==-1){
+check = true;
+break;
+}
+}
+for(var i =0;i<count.length;i++){
+    if(ch.indexOf(count[i])==-1){
+    check = true;
+    break;
+    }
+}
+if(!user_id) check = true;
     var data_followed=[];
-    Mongo.connect("mongodb://localhost:27017/", function(err, db){
+    if(!check){
+    Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1", function(err, db){
     if(err) throw err;
-    var dbo = db.db("loginapp");
+    var dbo = db.db("databaseofmoki");
     dbo.collection("users").findOne({_id: mongoose.Types.ObjectId(user_id)}, function(er, result){
         if(!result){
             res.json({code: "1000", message: "OK", data: "Không tìm thấy thông tin user"});
@@ -727,18 +836,36 @@ app.post("/get_list_following", function(req, res){
     
     
     })
+}else{
+    res.json({code: "5", message: "Failed", data: "input không đúng"})
+}
     })
 
 app.post("/search_user", function(req, res){
 var keyword = req.body.keyword;
 var index = req.body.index;
 var count = req.body.count;
+var ch = "0123456789";
+var check = false;
+for(var i =0;i<index.length;i++){
+if(ch.indexOf(index[i])==-1){
+check = true;
+break;
+}
+}
+for(var i =0;i<count.length;i++){
+    if(ch.indexOf(count[i])==-1){
+    check = true;
+    break;
+    }
+}
+if(checkInput(keyword)!=0) check = true;
 var data=[];
-Mongo.connect("mongodb://localhost:27017/", function(err,db){
+if(!check){
+Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1", function(err,db){
 if(err) throw err;
-var dbo = db.db("loginapp");
+var dbo = db.db("databaseofmoki");
 dbo.collection("users").find().toArray(function(er, result){
-
 for(var i=0;i<result.length;i++){
     if(search_name(result[i].username, keyword)> 0){
     data.push({id: result[i]._id, username: result[i].username, avatar: result[i].avatar});
@@ -746,7 +873,12 @@ for(var i=0;i<result.length;i++){
 }
 
 if(data.length>0){
-    res.json({code: "1000", message: "OK", data: data})
+    var final = [];
+    for(var i=index ; i<data.length; i++){
+        if(i-index<count)
+         final.push(data[i]);
+    }
+    res.json({code: "1000", message: "OK", data: final})
 }
 else{
     res.json({code: "5", message: "Failed", data: data})
@@ -754,12 +886,20 @@ else{
 db.close();
 })
 })
+}else{
+    res.json({code: "5", message: "Failed", data: "Input không đúng"})
+}
 })
 
 
 app.post("/check_password", function(req, res){
 var username = req.body.phone;
 var password = req.body.password;
+var checkusername = checkPhoneNumber(username);
+var checkpassword = checkPassword(password);
+if(checkusername!=0 ||  checkpassword !=0){
+    res.json({code: "5", message: "Failed", data: "Số điện thoại hoặc mật khẩu không đúng"})
+}else{
     User.getUserByUsername(username, function (err, user) {
         if (err) throw err;
         if (!user) {
@@ -778,7 +918,7 @@ var password = req.body.password;
     };
     });
 
-
+}
 })
 
 app.post("/get_user_listings", function(req,res){
@@ -786,15 +926,45 @@ var user_id = req.body.user_id;
 var index = req.body.index;
 var count = req.body.count;
 var category_id = req.body.category_id;
+var ch = "0123456789";
+var check = false;
+for(var i =0;i<index.length;i++){
+if(ch.indexOf(index[i])==-1){
+check = true;
+break;
+}
+}
+for(var i =0;i<count.length;i++){
+    if(ch.indexOf(count[i])==-1){
+    check = true;
+    break;
+    }
+}
+if(!user_id) check = true;
+if(checkInput(category_id)!=0) check = true;
 var user;
 var datare=[];
-Mongo.connect("mongodb://localhost:27017/",function(err,db){
+if(!check){
+Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
 if(err) throw err;
-var dbo = db.db("loginapp");
+var dbo = db.db("databaseofmoki");
 dbo.collection("users").findOne({_id: mongoose.Types.ObjectId(user_id)},function(e,r){
 if(e) throw r;
 if(r){
-    user=r;
+    dbo.collection("TempSP").find({shop: r.username, attached: category_id}).toArray(function(er, re){
+        if(er)  throw er;
+        for(var i=index;i<re.length;i++){
+           if(i-index<count){
+            datare.push(re[i]);
+           }else{
+               break;
+           }
+        }
+    })
+    dbo.collection("TempSP").find().toArray(function(er,ress){
+        if(er) throw er;
+        res.json({code: "1000", message: "OK", data: datare})
+    })
 }
 else {
     res.json({code: "5", message: 'Failed', data: "Không tìm thấy user"})
@@ -803,26 +973,32 @@ else {
 })
 
 })
-Mongo.connect("mongodb://localhost:27017/",function(err,db){
-if(err) throw err;
-var dbo = db.db("mydb");
-if(user){
-dbo.collection("TempSP").find({shop: user.username, attached: category_id}).toArray(function(er, re){
-    if(er)  throw er;
-    for(var i=index;i<re.length;i++){
-       if(i-index<count){
-        datare.push(re[i]);
-       }else{
-           break;
-       }
-    }
-})
-dbo.collection("TempSP").find().toArray(function(er,ress){
-    if(er) throw er;
-    res.json({code: "1000", message: "OK", data: datare})
-})
+// Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
+// if(err) throw err;
+// var dbo = db.db("databaseofmoki");
+
+// if(user){
+// dbo.collection("TempSP").find({shop: user.username, attached: category_id}).toArray(function(er, re){
+//     if(er)  throw er;
+//     for(var i=index;i<re.length;i++){
+//        if(i-index<count){
+//         datare.push(re[i]);
+//        }else{
+//            break;
+//        }
+//     }
+// })
+// dbo.collection("TempSP").find().toArray(function(er,ress){
+//     if(er) throw er;
+//     res.json({code: "1000", message: "OK", data: datare})
+// })
+// }else{
+//     res.json({code: "5", message: "Faied", data: "Không tồn tại "})
+// }
+//})
+}else{
+res.json({code: "5", message: "Faied", data: "Input không đúng"})
 }
-})
 })
 
 
@@ -831,10 +1007,26 @@ app.post("/get_list_products", function(req,res){
     var index = req.body.index;
     var count = req.body.count;
     var category_id = req.body.category_id;
+    var ch = "0123456789";
+var check = false;
+for(var i =0;i<index.length;i++){
+if(ch.indexOf(index[i])==-1){
+check = true;
+break;
+}
+}
+for(var i =0;i<count.length;i++){
+    if(ch.indexOf(count[i])==-1){
+    check = true;
+    break;
+    }
+}
+if(checkInput(category_id)!=0) check = true;
     var datare=[];
-    Mongo.connect("mongodb://localhost:27017/",function(err,db){
+    if(!check){
+    Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
     if(err) throw err;
-    var dbo = db.db("mydb");
+    var dbo = db.db("databaseofmoki");
     dbo.collection("TempSP").find({attached: category_id}).toArray(function(er, re){
         if(er)  throw er;
         for(var i=index;i<re.length;i++){
@@ -851,17 +1043,21 @@ app.post("/get_list_products", function(req,res){
     })
    
     })
+}else{
+    res.json({code: "5" , message: "Failed", data: "Input không đúng"})
+}
     })
 
 app.post("/search", function(req,res){
 var keyword = req.body.keyword;
+if(checkInput(keyword)==0){
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
+var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 var data = new Array();
 var data_num = new Array();
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  var dbo = db.db("mydb");
+  var dbo = db.db("databaseofmoki");
   dbo.collection("TempSP").find().toArray( function(err, result) {
     if (err) throw err;
     for(var i = 0;i<result.length;i++){
@@ -887,37 +1083,23 @@ MongoClient.connect(url, function(err, db) {
     db.close();
   });
 });
- 
+}else{
+    res.json({code: "5", message: "Failed", data: "Input không đúng"})
+}
 
 
 })
 
 app.post("/search_product", function(req,res){
     var key = req.body.product_name;
+    if(checkInput(key)==0){
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     var data = new Array();
     var data_num = new Array();
-     var searchuser = req.body.searchUser;
-     if(searchuser == "on"){
-        MongoClient.connect(url,function(err,db){
-            if(err) throw err;
-            var dbo = db.db("loginapp");
-            dbo.collection("users").find().toArray(function(err,result){
-              if(err) throw err;
-              for(var i = 0; i < result.length;i++){
-                  if(search_name(result[i].username,key) > 0){
-                      data.push(result[i]);
-                  }
-              }
-              res.render("searchuser",{ketqua:data,SP:dsproduct.reverse(),title:"Kết quả tìm kiếm"});  
-            })
-        })
-     }else{
-       
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("mydb");
+      var dbo = db.db("databaseofmoki");
       var re = {name: key};
       dbo.collection("TempSP").find().toArray( function(err, result) {
         if (err) throw err;
@@ -944,7 +1126,9 @@ app.post("/search_product", function(req,res){
         db.close();
       });
     });
-     }
+}else{
+    res.render("searchpage",{kq: [],SP:dsproduct.reverse(),title:"Từ khóa chứa kí tự không hợp lệ"})
+}
 })
 var listmyfollow=[];
 var be_listmyfollow=[];
@@ -970,19 +1154,22 @@ app.get('/login',function(req,res){
     });
 
 app.post('/login',
-    passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login',successFlash:"Success", failureFlash: 'Invalid username or password.'}));
+    passport.authenticate('local', { successRedirect: '/', failureRedirect: '/login',successFlash:"Success", failureFlash: 'Invalid username or password.'}),function(req,res){
+
+    });
  
 
 //List like
 
 app.get("/likeList/:id", function(req, res){
 var title = req.params.id;
+if(checkInput(title)==0){
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("mydb");
+      var dbo = db.db("databaseofmoki");
       dbo.collection("TempSP").find().toArray(function(err, result) {
         if (err) throw err;
         var likelis = [];
@@ -995,6 +1182,10 @@ var title = req.params.id;
         db.close();
       });
     });
+}else{
+   res.json({code: "5", message: "Failed", data: "Không tìm thấy user hoặc user chứa kí tự đặc biệt"})
+
+}
 })
 
 // Danh sách theo dõi
@@ -1002,14 +1193,14 @@ var title = req.params.id;
 app.get("/followList/:id", function(req, res){
 var title = req.params.id;
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("loginapp");
+      var dbo = db.db("databaseofmoki");
       dbo.collection("users").findOne({username: title},function(err, result) {
         if (err) throw err;
-      var bo = db.db("mydb");
+      var bo = db.db("databaseofmoki");
       bo.collection("TempSP").find({}).toArray(function(err,result1){
         res.render("followList",{kq: result.follow,SP:result1});
         db.close();
@@ -1027,14 +1218,14 @@ var title = req.params.id;
 app.get("/befollowList/:id", function(req, res){
     var title = req.params.id;
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("loginapp");
+      var dbo = db.db("databaseofmoki");
       dbo.collection("users").findOne({username: title},function(err, result) {
         if (err) throw err;
-    var bo = db.db("mydb");
+    var bo = db.db("databaseofmoki");
     bo.collection("TempSP").find({}).toArray(function(err,result1){
         res.render("befollowList",{kq: result.be_follow,SP:result1});
         db.close();
@@ -1047,14 +1238,15 @@ var f1,f2,f3,user1;
 // Thông tin tài khoản người dùng 
 app.get("/userinformation/:id", function(req, res){
 var title = req.params.id;
+if(checkInput(title)==0){
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";     
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";     
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("loginapp");
+      var dbo = db.db("databaseofmoki");
       dbo.collection("users").find({username: title}).toArray(function(err, result) {
         if (err) throw err;
-     var bo = db.db("mydb");
+     var bo = db.db("databaseofmoki");
      user1 = result;
      var lfollow=result[0].follow;
      var lfollowed=result[0].be_follow;
@@ -1084,6 +1276,10 @@ var title = req.params.id;
      db.close();
       });
     });
+}else{
+res.json({code: "5", message: "Failed", data: "Không tìm thấy user hoặc tên user chứa kí tự đặc biệt"})
+
+}
 })
 var changeImage="";
 var storage3=multer.diskStorage({
@@ -1099,33 +1295,38 @@ var upload3 = multer({storage: storage3});
 // chỉnh sửa thông tin người dùng
 app.get('/user/modifier/:id',function(req,res){
     var title = req.params.id;
+    if(checkInput(title)==0){
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     MongoClient.connect(url,function(err,db){
         if (err) throw err;
-        var dbo = db.db("loginapp");
+        var dbo = db.db("databaseofmoki");
         dbo.collection("users").find({username:title}).toArray(function(err,result){
             if(err) throw err;
-         var bo=db.db("mydb");
+         var bo=db.db("databaseofmoki");
          bo.collection("TempSP").find({}).toArray(function(err,result1){
             res.render("modifierUser",{user:result,SP:result1.reverse()});
          })
          db.close();
         })
     })
+}else{
+    res.json({code: "5", message: "Failed", data: "Không tìm thấy user hoặc tên user chứa kí tự đặc biệt"})
+}
 })
 // Thông tin của 1 người dùng khác
 app.get("/user/other/:id",function (req,res) {
     var dataname=req.params.id.split("&&");
     var title = dataname[0];
+    if(checkInput(dataname[0])==0 && checkInput(dataname[1])==0){
     var checksame=false;
     if(dataname[0]==dataname[1])
     checksame=true;
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     MongoClient.connect(url,function(err,db){
         if (err) throw err;
-        var dbo = db.db("loginapp");
+        var dbo = db.db("databaseofmoki");
         dbo.collection("users").find({username: title}).toArray(function(err, result) {
             if (err) throw err;
             var checkfollow=false;
@@ -1136,7 +1337,7 @@ for(var i=0;i<list_be_follow.length;i++){
         break;
     }
 }
-         var bo = db.db("mydb");
+         var bo = db.db("databaseofmoki");
          var lfollow=result[0].follow;
          var lfollowed=result[0].be_follow;
          var data=[];
@@ -1165,6 +1366,9 @@ for(var i=0;i<list_be_follow.length;i++){
          db.close();
           });
     })
+}else{
+    res.json({code: "5", message: "Failed", data: "Không tìm thấy user hoặc tên user chứa kí tự đặc biệt"})
+}
 })
 
 // chỉnh sửa thông tin người dùng
@@ -1177,25 +1381,26 @@ app.post('/user/modifier/:id',upload3.single("avatar"),function(req,res){
     var firstname = req.body.firstname;
     var lastname = req.body.lastname;
     var x= req.body.phonenumber;
-    req.checkBody('firstname',"firstname bắt buộc!").notEmpty();
-    req.checkBody('lastname',"lastname bắt buộc!").notEmpty();
-    req.checkBody('email',"Email bắt buộc!").notEmpty();
-    req.checkBody('address','Địa chỉ bắt buộc!').notEmpty();
-    req.checkBody('city','Thành phố bắt buộc!').notEmpty();
-     var errors = req.validationErrors();
-    if(errors){
+     var checkphone = checkPhoneNumber(x);
+     var checkemail = checkEmail(email);
+     var checkfirst = checkInput(firstname);
+     var checklast = checkInput(lastname);
+     var checkaddress = checkInput(address);
+     var checkcity = checkInput(city);
+     var checktitle = checkInput(title);
+     if(checkphone!=0 || checktitle!=0 ||  checkemail!=0 ||  checkfirst!=0 ||  checklast!= 0||  checkaddress!=0 || checkcity !=0){ 
         var MongoClient = require("mongodb").MongoClient;
-        var url = "mongodb://localhost:27017/";
+        var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
         MongoClient.connect(url,function(err,db){
             if(err) throw err;
             var where ={username:title};
-            var dbo = db.db("mydb");
-                var bo=db.db("loginapp");
+            var dbo = db.db("databaseofmoki");
+                var bo=db.db("databaseofmoki");
                 bo.collection("users").find(where).toArray(function(err,re){
                     if(err) throw err;
                     dbo.collection("TempSP").find({}).toArray(function(err,result){
                     res.render("user",{
-                        errors:errors,
+                        errors:[{msg: "Dữ liệu nhập vào không đúng"}],
                         sp:f3,
                         kq:re,
                         follow: f1,
@@ -1205,13 +1410,13 @@ app.post('/user/modifier/:id',upload3.single("avatar"),function(req,res){
                 })
                 db.close();
             })
-        })
-    }else{
+        }) 
+     } else{
         var MongoClient = require('mongodb').MongoClient;
-        var url='mongodb://localhost:27017/';
+        var url='mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1';
         MongoClient.connect(url,function(err,db){
             if(err) throw err;
-            var dbo = db.db("loginapp");
+            var dbo = db.db("databaseofmoki");
             var where ={PhoneNumber : x};
             var query={$set: {avatar: changeImage,firstname:firstname,email:email,lastname:lastname,city:city,address:address}};
             dbo.collection("users").updateOne(where,query,function(err,res){
@@ -1237,23 +1442,18 @@ app.post('/user/modifier/:id',upload3.single("avatar"),function(req,res){
          var oldPassword = req.body.oldPassword;
         var newPassword = req.body.newPassword;
         var newPassword2 = req.body.newPassword2;
-        
-        req.checkBody('oldPassword','Nhập mật khẩu cũ').notEmpty();
-        req.checkBody('newPassword','Nhập mật khẩu mới').notEmpty();
-        req.checkBody('newPassword2','Nhập lại mật khẩu mới').notEmpty();
-        req.checkBody('newPassword2','Xác nhận mật khẩu không khớp').equals(req.body.newPassword);
- // check errors
-var errors = req.validationErrors();
-    if(errors){
+var checknewpassword = checkPassword(newPassword);
+var checknewpassword2 = checkPassword(newPassword2);
+    if(checknewpassword != 0 && checknewpassword2 !=0){
    // res.render("changePassword",{errors:errors});
-   res.json({code: "5", message: "Failed", data: errors})
+   res.json({code: "5", message: "Failed", data: [" Mật khẩu không đúng"]})
     }else{
         // truy cap de lay mat khau cu
         var MongoClient = require('mongodb').MongoClient;
-        var url = "mongodb://localhost:27017";
+        var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
         MongoClient.connect(url,function(err,foundUser){
             if(err) throw err;
-            var dbo = foundUser.db("loginapp");
+            var dbo = foundUser.db("databaseofmoki");
             dbo.collection("users").findOne({PhoneNumber: title},function(err,user){
                 if(err) throw err;
                 if(user){
@@ -1280,7 +1480,7 @@ var errors = req.validationErrors();
         }
      })
      }else{
-         res.json({code: "5", message: "Failed", data: "Số điện thoại không đúng"})
+         res.json({code: "5", message: "Failed", data: ["Không tìm thấy user"]})
      }
     })
     })
@@ -1294,13 +1494,10 @@ io.on("connection",function(socket){
 socket.on("connect",function(){
     console.log(" Có kết nối bị ngắt")
 })
-
-// chat với ai
-
 // log out
 app.get('/logout/:id', function (req, res) {
     req.logout();
-var data={code: "1000", message:"OK"};
+if(checkInput(req.params.id)==0){
 for(var i=0;i<List_user_connected.length;i++)
 if(List_user_connected[i].indexOf(req.params.id)!=-1)
 
@@ -1309,18 +1506,22 @@ if(List_user_connected[i].indexOf(req.params.id)!=-1)
     List_user_connected.splice(i,1);
 
 }
+}else{
+    res.json({code: "5",message:  "Failed", data: "Input không đúng"})
+}
     req.flash('success_msg', 'You are logged out');
     res.redirect('/');
 });
 
-socket.userphone="";
 //khi login thi chay middleware va goi den cai nay
 passport.use(new LocalStrategy(
     function (username, password, done) {
+        if(checkPhoneNumber(username)!=0 || checkPassword(password) !=0){
+              return done(null, false, {code: "1000", message: "Số diện thoại hoặc mật khẩu không đúng" });
+        }else{
         User.getUserByUsername(username, function (err, user) {
             if (err) throw err;
-            if (!user) {
-              
+            if (!user) {  
                 return done(null, false, {code: "1000", message: 'Unknown User' });
             }
            if(user){
@@ -1334,23 +1535,23 @@ passport.use(new LocalStrategy(
                     io.sockets.emit("add-user",user.username);
                     return done(null, user);
                 } else {
-                  
                     return done(null, false, { message: 'Invalid password' });
                 }
             });
         };
         });
+    }
     }));
 
 
 socket.on("gui-comment",function(data){
     var  info = data.split("ooo");
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://127.0.0.1:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("mydb");
+      var dbo = db.db("databaseofmoki");
       var myquery = { _id : info[1] };
 
       var newvalues = { $set: {comment: info[2]+info[4]+":"+info[3]+"\n"} };
@@ -1371,11 +1572,11 @@ socket.on("gui-comment",function(data){
 })
 socket.on("like",function(data){
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://127.0.0.1:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     var data = data.split("ooo");
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("mydb");
+        var dbo = db.db("databaseofmoki");
         var myquery = { _id : data[0] };
         var newvalues = { $set: {like: Likedata+data[2]+","} };
         dbo.collection("TempSP").updateOne(myquery, newvalues, function(err, res) {
@@ -1399,10 +1600,10 @@ socket.on("like",function(data){
 socket.on("unlike",function(data){
     var data = data.split("ooo");
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://127.0.0.1:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("mydb");
+        var dbo = db.db("databaseofmoki");
         var myquery = { _id : data[0] };
         var unlike = Likedata.split(",");
         for(var i=0;i<unlike.length;i++){
@@ -1438,10 +1639,10 @@ socket.on("unlike",function(data){
 
 var listuser;
 var MongoClient1 = require('mongodb').MongoClient;
-var url1 = "mongodb://127.0.0.1:27017/";
+var url1 = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 MongoClient1.connect(url1, function(err, db) {
 if (err) throw err;
-var dbo = db.db("loginapp")
+var dbo = db.db("databaseofmoki")
 dbo.collection("users").find().toArray(function(err,res){
 if(err) throw err
 listuser=res;
@@ -1453,7 +1654,7 @@ db.close();
 socket.on("follow",function(data){
 var data=data.split("\n");
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://127.0.0.1:27017/";
+var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 for(var i=0; i<listuser.length;i++){
     if(listuser[i].username==data[0]){
     listmyfollow = listuser[i].follow;
@@ -1470,7 +1671,7 @@ break;
 be_listmyfollow.push(data[0]);
 MongoClient.connect(url, function(err, db) {
     if (err) throw err;
-    var dbo = db.db("loginapp");
+    var dbo = db.db("databaseofmoki");
 dbo.collection("users").updateOne({username: data[0]},{$set: {follow: listmyfollow}},function(err,res){
     if(err) throw err  
 })
@@ -1488,10 +1689,10 @@ dbo.collection("users").findOne({username:data[1]},function(err,res){
     be_listmyfollow = res.be_follow;
     })
     var MongoClient2 = require('mongodb').MongoClient;
-var url2 = "mongodb://127.0.0.1:27017/";
+var url2 = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 MongoClient2.connect(url2, function(err, db) {
 if (err) throw err;
-var dbo = db.db("loginapp")
+var dbo = db.db("databaseofmoki")
 dbo.collection("users").find().toArray(function(err,res){
 if(err) throw err
 listuser=res;
@@ -1506,7 +1707,7 @@ db.close();
 socket.on("unfollow",function(data){
     var data=data.split("\n");
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://127.0.0.1:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     for(var i=0; i<listuser.length;i++){
         if(listuser[i].username==data[0]){
         listmyfollow = listuser[i].follow;
@@ -1529,7 +1730,7 @@ socket.on("unfollow",function(data){
     }
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
-    var dbo = db.db("loginapp");
+    var dbo = db.db("databaseofmoki");
 
     dbo.collection("users").updateOne({username: data[0]},{$set:{follow: listmyfollow}},function(err,res){
         if(err) throw err  
@@ -1548,10 +1749,10 @@ socket.on("unfollow",function(data){
     })
 
     var MongoClient2 = require('mongodb').MongoClient;
-var url2 = "mongodb://127.0.0.1:27017/";
+var url2 = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
 MongoClient2.connect(url2, function(err, db) {
 if (err) throw err;
-var dbo = db.db("loginapp")
+var dbo = db.db("databaseofmoki")
 dbo.collection("users").find().toArray(function(err,res){
 if(err) throw err
 listuser=res;
@@ -1580,8 +1781,6 @@ server.listen(8084,function(){
     console.log('server started at port 8084');
 });
 
-//pop-up-chat
-//chua check log in
 
 // Mongo URI
 var  test=0;
@@ -1674,20 +1873,20 @@ app.get("/sp/sp/:_id",function(req,res){
     var title = req.params._id;
     title = title.split("*")
    var mongoClient = require('mongodb').MongoClient;
-   var url = "mongodb://localhost:27017/";
+   var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     var _id = req.params._id;
     var query = {_id: title[0]};
     var withshop=[];
     mongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("mydb");
+        var dbo = db.db("databaseofmoki");
         var checkfollow = false;
         dbo.collection("TempSP").findOne(query,function(err, result) {
             if(err) throw err;  
             dbo.collection("TempSP").find({shop: result.shop}).toArray(function(erro,resu){
                withshop=resu;
             }) 
-            var bo = db.db("loginapp");
+            var bo = db.db("databaseofmoki");
 bo.collection("users").findOne({username: result.shop},function(er,re){
 if(er) throw er;
 var list_be_follow=re.be_follow;
@@ -1737,11 +1936,11 @@ db.close();
 app.post("/get_product",function(req,res){
     var id=req.body.id;
    var mongoClient = require('mongodb').MongoClient;
-   var url = "mongodb://localhost:27017/";
+   var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     var query = {_id: id};
     mongoClient.connect(url, function(err, db) {
         if (err) throw err;
-        var dbo = db.db("mydb");
+        var dbo = db.db("databaseofmoki");
         dbo.collection("TempSP").findOne(query,function(err, result) {
             if(err) throw err;  
 if(!result){
@@ -1782,11 +1981,11 @@ app.get('/deleteandupdate/:id',function(req,res){
     var _id = req.params.id;
     var query = {_id: _id};
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     test = 1;
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("mydb");
+      var dbo = db.db("databaseofmoki");
       dbo.collection("TempSP").findOne(query,function(err, result) {
         if (err) throw err;
         test = result.image;
@@ -1796,20 +1995,7 @@ app.get('/deleteandupdate/:id',function(req,res){
       });
     });
 })
-app.get("/dell",function(req,res){
-    var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
-    MongoClient.connect(url, function(err, db) {
-      if (err) throw err;
-      var dbo = db.db("mydb");
-      dbo.collection("Máy tính").find().toArray(function(err, result) {
-        if (err) throw err;
-        res.render('deleteandupdate',{});
-        db.close();
-      });
-    });
 
-})
 //Xóa và chỉnh sửa sản phẩm
 app.delete("/del_product",function(req,res){
     gfs.remove({ filename: req.body.delete, root: 'uploads' }, (err, gridStore) => {
@@ -1818,22 +2004,17 @@ app.delete("/del_product",function(req,res){
         }
       });
      
-       var attached = req.body.delete1;
        var title = req.body.nameuser;
        var query = {image: req.body.delete}
        var MongoClient = require('mongodb').MongoClient;
-       var url = "mongodb://localhost:27017/";
+       var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
        
        MongoClient.connect(url, function(err, db) {
          if (err) throw err;
-         var dbo = db.db("mydb");
+         var dbo = db.db("databaseofmoki");
          dbo.collection("TempSP").deleteOne(query, function(err, obj) {
            if (err) throw err;
          });
-         dbo.collection(attached).deleteOne(query, function(err, obj) {
-            if (err) throw err;
-            
-          });
           dbo.collection("TempSP").find({shop: title}).toArray(function(err, result) {
             if (err) throw err;
             res.render('user',{kq:user1,sp:result,errors: false,    follow: f1,
@@ -1845,15 +2026,12 @@ app.delete("/del_product",function(req,res){
 
 
 app.post("/edit_products",function(req,res){
-    
-    
-    
     var name = req.body.nameproduct;
     var describle = req.body.describleproduct;
     var bargain1 = req.body.bargainproduct1;
     var bargain2 = req.body.bargainproduct2;
     var bargain3 = req.body.bargainproduct3;
-    var title = req.body.nameuser;
+    // var title = req.body.nameuser;
     var bargain;
     if(bargain1=='on')
     bargain = "Miễn phí";
@@ -1861,42 +2039,39 @@ app.post("/edit_products",function(req,res){
     bargain = "Cho phép mặc cả";
     if(bargain3=='on')
     bargain = "Bán nhanh";
-    
     var attached = req.body.attached;
-    
     var state = req.body.state;
     var label = req.body.label;
     var weight = req.body.weight;
-   
     var placesell = req.body.sell;
     var price = req.body.price;
-    var filename = req.body.image;
-    var errors=0;
-if(!name || !price || !describle)
-      errors = [{msg: "Bạn nhập thiếu dữ liệu"}];
-   if(errors){
-    res.render('deleteandupdate',{err: errors,data: {image: test,_id: req.body.filename, name: name,describle: describle,bargain: bargain,attached: attached,label: label,weight: weight,state: state,price: price,placeSell:placesell}});
-   }else{
+var checkname = checkInput(name);
+var checkdescrible = checkInput(describle);
+var checbargain= checkInput(bargain);
+var checkattached = checkInput(attached);
+var checkstate = checkInput(state);
+var checklabel = checkInput(label);
+var checkweight = checkInput(weight);
+var checkplace = checkInput(placesell);
+var checkprice = checkInput(price);
+    if(checkname!=0 || checkdescrible !=0 || checbargain !=0 || checkattached !=0 || checklabel !=0 || checkstate!=0 || checkweight !=0 || checkplace !=0 || checkprice !=0)
+    //   errors = [{msg: "Bạn nhập thiếu dữ liệu"}];
+   { 
+       res.json({code: "5", message: "failed", data: "Dữ liệu không đúng"})
+}
+  else{
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     var where = {_id: req.body.filename }
 var query = {$set: {name: name,price: price,label: label, weight: weight, state: state,bargain:bargain,describle:describle,placeSell:placesell}};
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  var dbo = db.db("mydb");
-  dbo.collection(attached).updateOne(where,query, function(err, res) {
-    if (err) throw err;
-  });
+  var dbo = db.db("databaseofmoki");
   dbo.collection("TempSP").updateOne(where,query, function(err, res) {
     if (err) throw err;
   });
 
-  dbo.collection("TempSP").find({shop: title}).toArray(function(err, result) {
-
-    if (err) throw err;
-    res.render('deleteandupdate',{err: [{msg: "OK"}],data: {image: filename,_id: req.body.filename, name: name,describle: describle,bargain: bargain,attached: attached,label: label,weight: weight,state: state,price: price,placeSell:placesell}});
-   db.close();
-  }); 
+   res.json({code: "1000", message: "OK", data: "Chỉnh sửa thành công"}) 
   db.close();
 });
 
@@ -1956,9 +2131,9 @@ app.delete('/deleteimage/:id', (req, res) => {
 app.post("/get_user_info",function(req,res){
 var id = req.body.id;
 if(List_user_connected.indexOf(id)!=-1){
-Mongo.connect("mongodb://localhost:27017/",function(err,db){
+Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
 if(err) throw err;
-var dbo = db.db("loginapp");
+var dbo = db.db("databaseofmoki");
 dbo.collection("users").findOne({username: id},function(er, user){
     if(user)
      res.json({code: "1000", message: "OK", data: user});
@@ -1968,9 +2143,9 @@ dbo.collection("users").findOne({username: id},function(er, user){
 })
 })
 }else{
-    Mongo.connect("mongodb://localhost:27017/",function(err,db){
+    Mongo.connect("mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1",function(err,db){
         if(err) throw err;
-        var dbo = db.db("loginapp");
+        var dbo = db.db("databaseofmoki");
         dbo.collection("users").findOne({username: id},function(er, user){
             if(user)
              res.json({code: "1000", message: "OK", data: [user._id,user.username,user.avatar]});
@@ -1983,7 +2158,7 @@ dbo.collection("users").findOne({username: id},function(er, user){
 })
 
 // Thêm sản phẩm
-app.post("/add_product",function(req,res){
+app.post("/add_product",upload.single('file'),function(req,res){
     if(!test){
         res.render('themsanpham',{files: imageFile,err: [{msg:"Error Unknown"}]});
     }else{
@@ -2009,22 +2184,25 @@ app.post("/add_product",function(req,res){
     var placesell = req.body.sell;
     var price = req.body.price;
     var filename = test;
-    var errors=0;
-if(!name || !price || !describle)
-      errors = [{msg: "Error Unknown"}];
+var checkname = checkInput(name);
+var checkdescrible = checkInput(describle); 
+var checbargain = checkInput(bargain1); 
+var checkattached = checkInput(attached); 
+var checkstate = checkInput(state);
+var checklabel = checkInput(label); 
+var checkweight = checkInput(weight); 
+var errors=0;
+if(checkname!=0 || checkdescrible !=0 || checbargain !=0 || checkattached !=0 || checklabel !=0 || checkstate!=0 || checkweight !=0)
+      errors = [{code: "5" , message: "Failed", msg: "Dữ liệu không đúng!! Xin vui lòng nhập lại"}];
    if(errors){
     res.render('themsanpham',{files: imageFile,err: errors});
    }else{
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
-    
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
    var query = {_id: filename.toString().substring(0,filename.length-4),image: filename,name: name,price: price+" VNĐ",shop: title,label: label, weight: weight, state: state,placeSell:placesell,attached:attached,bargain:bargain,describle:describle,comment:"",like:"",  report: []};
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
-  var dbo = db.db("mydb");
-  dbo.collection(attached).insertOne(query, function(err, res) {
-    if (err) throw err;
-  });
+  var dbo = db.db("databaseofmoki");
   dbo.collection("TempSP").insertOne(query, function(err, res) {
     if (err) throw err;
   });
@@ -2043,11 +2221,11 @@ MongoClient.connect(url, function(err, db) {
 app.get("/list_product/:id", function(req, res){
     var title = req.params.id;
     var MongoClient = require('mongodb').MongoClient;
-    var url = "mongodb://localhost:27017/";
+    var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
     
     MongoClient.connect(url, function(err, db) {
       if (err) throw err;
-      var dbo = db.db("mydb");
+      var dbo = db.db("databaseofmoki");
       dbo.collection("TempSP").find({shop: title }).toArray(function(err, result) {
         if (err) throw err;
        res.render("listproductfollow",{kq: result,SP: dsproduct.reverse()});
@@ -2062,33 +2240,33 @@ app.get("/list_product/:id", function(req, res){
 app.get("/",function(req,res){
     var user = {username: ""}
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb://localhost:27017/";
-var u="mongodb://KhanhPhan:khanh2748@ds123664.mlab.com:23664/databaseofmoki"
+var url = "mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1";
+var u="mongodb://KhanhPhanN:khanh2748@ds123664.mlab.com:23664/databaseofmoki?authSource=databaseofmoki&w=1"
 var res2,res3,res4,res5;
 var MongoClient1 = require('mongodb').MongoClient;
-MongoClient1.connect(url, function(err, db) {
-var db1 = db.db("mydb");
+MongoClient1.connect(u, function(err, db) {
+var db1 = db.db("databaseofmoki");
 
-db1.collection("Bé ngủ").find().toArray(function(err,r){
+db1.collection("TempSP").find({attached: "Bé ngủ"}).toArray(function(err,r){
     res3=r;
     
 })
-db1.collection("Bé tắm").find().toArray(function(err,r){
+db1.collection("TempSP").find({attached: "Bé tắm"}).toArray(function(err,r){
     res4=r;
 })
-db1.collection("Bé ăn").find().toArray(function(err,r){
+db1.collection("TempSP").find({attached: "Bé ăn"}).toArray(function(err,r){
     res2=r;
 })  
 db1.collection("TempSP").find().toArray(function(err,r){
     res5=r;
 })
 db.close();
-MongoClient.connect(url, function(err, db) {
+MongoClient.connect(u, function(err, db) {
     if (err) throw err;
-    var dbo = db.db("mydb");
-    dbo.collection("Bé vệ sinh").find({}).toArray(function(err, result) {
+    var dbo = db.db("databaseofmoki");
+    dbo.collection("TempSP").find({attached: "Bé vệ sinh"}).toArray(function(err, result) {
       if (err) throw err;
-      dbo.collection("Bé mặc").find().toArray(function(err, res1){
+      dbo.collection("TempSP").find({attached: "Bé mặc"}).toArray(function(err, res1){
         if (err) throw err;
         var datastateuser=[];
         for(var i=0;i<list_user.length;i++){

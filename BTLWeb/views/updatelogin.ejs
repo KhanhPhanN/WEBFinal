@@ -49,8 +49,15 @@ form p {
         <div class="headings">
           <h5>Đăng ký </h5>
         </div><hr>
+        <%if(msg){%>
+      <div style="color: red"><%-msg%></div>
+          <%}%>
         <div class="content">
+<<<<<<< HEAD
           <form action="/update_register" encoding="" class="form-horizontal form-validate" id="UserRegisterForm" method="post" enctype="multipart/form-data" onsubmit="return check()"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	
+=======
+          <form action="/update_register" encoding="" class="form-horizontal form-validate" id="UserRegisterForm" method="post" enctype="multipart/form-data"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
                <label>Avatar</label> <label  class="col-sm-3 control-label" id="lb-avatar"><img src="/imagei/photo.png"><br><input name="Avatar" id="avatar" type="file" accept="image/png, image/jpeg,image/gif,image/jpg" ></label>
                 <div id="show-photo" class="preview"><p>Chưa tải ảnh</p></div>
             
@@ -58,30 +65,50 @@ form p {
           <div class="form-group">
             <div class="col-sm-6">
           <input type="text" name="sdt" value="<%-sdt%>" hidden>
+<<<<<<< HEAD
               <div class="input number required"><label class="col-sm-3 control-label">Email:</label><input name="Email" id="email" class="form-control" placeholder="Xin vui lòng nhập email" type="email"  required="required" aria-required="true" aria-invalid="true" onchange="checkEmail()"></div>	
+=======
+              <div class="input number required"><label class="col-sm-3 control-label">Email:</label><input name="Email" class="form-control" placeholder="Xin vui lòng nhập email" type="email"  required="required" ></div>	
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
                                             </div>
               </div>
               <div id="email-error"></div>
               <div class="form-group">
                 <div class="col-sm-6">
+<<<<<<< HEAD
                   <div class="input password required">  <label class="col-sm-3 control-label">User name:</label><input name="username" id="username" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập tên tài khoản" data-rule-required="true" data-msg-required="Vui lòng nhập mật khẩu" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ và số" data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" onchange="checkUsername()" required="required"/></div>										</div>
+=======
+                  <div class="input password required">  <label class="col-sm-3 control-label">User name:</label><input name="username" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập tên tài khoản" type="text" id="username" required="required"/></div>										</div>
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
                 </div>
                 <div id="username-error"></div>
 
                 <div class="form-group">
                         <div class="col-sm-6">
+<<<<<<< HEAD
                           <div class="input number required"><label class="col-sm-3 control-label">First name:</label><input  name="First" id="firstname" class="form-control" placeholder="Xin vui lòng nhập first name"  value="" data-rule-required="true" data-msg-required="Vui lòng nhập số điện thoại của bạn" data-rule-number="true" data-msg-number="Xin vui lòng nhập số" data-rule-minlength="10" data-msg-minlength="Số điện thoại từ 10 - 11 ký tự" data-rule-maxlength="11" data-msg-maxlength="Số điện thoại từ 10 - 11 ký tự" type="text"  required="required" aria-required="true" aria-invalid="true" onchange="checkFirstName()"></div>	
+=======
+                          <div class="input number required"><label class="col-sm-3 control-label">First name:</label><input  name="First" class="form-control" placeholder="Xin vui lòng nhập first name"  type="text"  required="required" ></div>	
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
                                                         </div>
                           </div>
                   <div id="firstname-error"></div>
                           <div class="form-group">
                             <div class="col-sm-6">
+<<<<<<< HEAD
                               <div class="input password required">  <label class="col-sm-3 control-label">Last name:</label><input name="Last" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập last name" data-rule-required="true" data-msg-required="Vui lòng nhập last name" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ " data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" id="lastname" required="required" onchange="checkLastName()"/></div>										</div>
+=======
+                              <div class="input password required">  <label class="col-sm-3 control-label">Last name:</label><input name="Last" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập last name" type="text" id="last" required="required"/></div>										</div>
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
                             </div>
                             <div id="lastname-error"></div>
                             <div class="form-group">
                                     <div class="col-sm-6">
+<<<<<<< HEAD
                                       <div class="input number required"><label class="col-sm-3 control-label">Adress:</label><input name="Address" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập địa chỉ" data-rule-required="true" data-msg-required="Vui lòng nhập địa chỉ" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ hoặc số" data-rule-minlength="6" data-msg-minlength=" tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength=" tối đa 30 ký tự" type="text" id="address" required="required" onchange="checkAddress()"/></div>	
+=======
+                                      <div class="input number required"><label class="col-sm-3 control-label">Adress:</label><input name="Address" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập địa chỉ" type="text" id="address" required="required"/></div>	
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
                                                                     </div>
                                       </div>
                                       <div id="address-error"></div>
@@ -91,7 +118,11 @@ form p {
                                         </div>    
                                     <div id="city-error"></div>             
                 
+<<<<<<< HEAD
                     <input id ="btdk" style="margin-top:15px" class="btn btn-default text-right" type="submit" value="Cập nhật thông tin	" onclick="checkSubmit()">									
+=======
+                    <input class="btn btn-default text-right" type="submit" value="Cập nhật thông tin	">									
+>>>>>>> b859d88b8a0d920862ba45e3e79bd4c1da11aed2
               
                     </form>									</div>
               </div>
