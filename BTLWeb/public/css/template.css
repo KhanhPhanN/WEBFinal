@@ -363,6 +363,44 @@ overflow-x: hidden;
 	   color: white;
 	   text-align: center;
        cursor: pointer;
+	    margin-bottom:100px;
+	}
+	#btfg{
+		height: 30px;
+	   width: 425px;
+	   background-color: #f16e8e;
+	   color: white;
+	   text-align: center;
+       cursor: pointer;
+	    margin-bottom:100px;
+	}
+	#btre{
+		height: 30px;
+	   width: 425px;
+	   background-color: #f16e8e;
+	   color: white;
+	   text-align: center;
+       cursor: pointer;
+	    margin-bottom:100px;
+	}
+	#btcp{
+		height: 30px;
+	   width: 425px;
+	   background-color: #f16e8e;
+	   color: white;
+	   text-align: center;
+       cursor: pointer;
+	    margin-bottom:100px;
+	}
+	#btdn{
+		height: 30px;
+	   width: 425px;
+	   background-color: #f16e8e;
+	   color: white;
+	   text-align: center;
+       cursor: pointer;
+	   margin-bottom:100px;
+	}
 	}
 	#code_verify{
 		height: 30px;
@@ -543,9 +581,10 @@ height:100%;
 	}
 	/* them san pham */
 	.wrapper-image1{
-		margin-left:20px;
-		float: left;
-	}
+		margin:0px auto;
+		width:400px;
+		text-align:center;
+		}
 	#image-moki{
 		width:100px;
 		height:100px;
@@ -789,6 +828,10 @@ font-family: Arial, Helvetica, sans-serif;
 	line-height: 40px;
 	position: relative;
 	   left: 100px;
+	  
+ }
+ #user-right{
+	margin-bottom:300px;
  }
  #user-left hr{
 	 margin: 0 10px;

@@ -202,4 +202,78 @@ padding:2em 1em;
  .menu-footer  li a:hover{
 	 color:#AAA;
  }
+ /* -------------- Delivery part ---------------*/
  
+ #shipper-wrapper{
+		display:grid;
+	grid-template-columns:repeat(3,1fr);
+	grid-auto-rows:100px;
+	grid-gap:40px;
+	margin:20px 100px 20px 100px;
+ }
+ 
+ #delivery{
+	 width:100%;
+	height:100%;
+	 background-color:#cbf0e5;
+	 border:1px dotted #ccc;
+	 padding:3px;
+	 display:grid;
+	grid-template-columns:30% 70%;
+ }
+ #return{
+	 width:100%;
+	height:100%;
+	 background-color:#ffe57d;
+	   border:1px dotted #ccc;
+ padding:3px;
+  display:grid;
+	grid-template-columns:30% 70%;
+ }
+ #cash{
+	 width:100%;
+	height:100%;
+	 background-color:#acecff;
+	  border:1px dotted #ccc;
+	  padding:3px;
+	   display:grid;
+	grid-template-columns:30% 70%;
+ }
+
+ .delivery-part:hover{
+	 border:1px dashed pink;
+	 padding:1px;
+ }
+.text >p:nth-child(even){
+	font-size:13px;
+	color: #4a8090;
+	font-weight: 500;
+	font-family: Roboto;
+}
+.text >p:nth-child(odd){
+	
+	    font-size: 24px;
+       color: #12728e;
+    text-transform: capitalize;
+    margin-bottom: 3px;
+    font-family: Oleo Script;
+    font-weight: 700;
+}
+.icon{
+	vertical-align:center;
+	padding-top:30px;
+	padding-left:30px;
+}
+#image-end{
+	display:grid;
+	grid-template-columns:repeat(2,1fr);
+	grid-gap:50px;
+	margin:20px 100px 20px 100px;
+}
+.banner_bkg{
+	width:100%;
+	height:100%;
+}
+.banner_bkg:hover{
+	border:1px dashed pink;
+}

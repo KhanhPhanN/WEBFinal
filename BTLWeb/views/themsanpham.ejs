@@ -183,12 +183,17 @@
                 <div style="display:inline;">
                 <div style="display:flex;">
                     <p id="name" style="font-size:1em;font-weight:bold;">Tên sản phẩm</p>
-                    <input type="text" id ="textinput" name ="nameproduct">
-               </div> <hr>
+                    <input type="text" id ="textinput" name ="nameproduct" onchange="checkName()">
+               </div> 
+               <div id="name-error"></div>
+               <hr>
                <div style="display:flex;">
                    <p id = "description" style="font-size:1em;font-weight:bold;">Mô tả sản phẩm</p>
-                   <textarea cols="50" rows="50" id="textarea" name="describleproduct"></textarea>
-               </div><hr>
+                   <textarea cols="50" rows="50" id="textarea" name="describleproduct" onchange="checkDescription()"></textarea>
+               </div>
+               <div id="des-error"></div>
+               <hr>
+               <div id="des-error" style="color:red"></div>
                <div style="display: flex">
                    <p style="font-size:1em;font-weight:bold;">Miễn phí</p>
                    <label class="switch" id="switch1">
@@ -234,7 +239,7 @@
                 <div id="product-price">
                     <label style="font-size:1em;font-weight:bold;"> Giá</label><br><hr>
                     <label ><img src="/imagei/money.png" width="15px" height="15px" style="padding-right: 5px">Giá bán(VND)</label>
-                    <input type="number" name="price" id="product-price-input" value=""><br><hr>
+                    <input type="text" name="price" id="product-price-input" value="" ><br><hr>
                 </div>
 
 
@@ -470,4 +475,63 @@ function uploadimage(){
  $("#taianh").attr("src",$("#ta").val());
 }
 </script>
+<script>
+
+    //check ten san pham
+
+// check first name
+function checkName(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+    for(var i=0; i<document.getElementById("textinput").value.length; i++){
+      var temp = document.getElementById("textinput").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("name-error").innerHTML = "Tên sản phẩm chứa kí tự không hợp lệ!"
+        document.getElementById("name-error").style.color = "red";
+      
+      }else{
+        document.getElementById("name-error").innerHTML = "";
+        
+      }
+    }
+  }
+
+    function chuyendoi(x){
+            return x.toLocaleString('it-IT');
+}
+        window.addEventListener("load", function(){
+            var i = document.getElementById("product-price-input");
+            
+            i.addEventListener("keyup", function(){
+                if(i.value < 10 && i.value >0){
+                    i.value *= 1000;
+                }
+                var n = this.value.replace(/\D/g,'');
+                n = parseInt(n);
+                if(n< 10 && n >0){
+                    n *= 1000;
+                }
+                if(n > 30000000)
+                n = Math.floor(n / 10000) * 1000;
+                i.value = n.toLocaleString("it-IT");
+                if(i.value.length >= 5){
+                    i.focus();
+                    i.selectionEnd = i.value.length - 4;
+                }   })   })
+
+        // check description
+        function checkDescription(){
+            var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_,: ";
+    for(var i=0; i<document.getElementById("textarea").value.length; i++){
+      var temp = document.getElementById("textarea").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("des-error").innerHTML = "Mô tả sản phẩm chứa kí tự không hợp lệ!"
+        document.getElementById("des-error").style.color = "red";
+      
+      }else{
+        document.getElementById("des-error").innerHTML = "";
+        
+      }
+    }
+        }
+    </script>
 </html> 

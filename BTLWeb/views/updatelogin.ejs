@@ -50,7 +50,7 @@ form p {
           <h5>Đăng ký </h5>
         </div><hr>
         <div class="content">
-          <form action="/update_register" encoding="" class="form-horizontal form-validate" id="UserRegisterForm" method="post" enctype="multipart/form-data" onsubmit="return checkPhoneNumber()"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	
+          <form action="/update_register" encoding="" class="form-horizontal form-validate" id="UserRegisterForm" method="post" enctype="multipart/form-data" onsubmit="return check()"><div style="display:none;"><input type="hidden" name="_method" value="POST"/></div>	
                <label>Avatar</label> <label  class="col-sm-3 control-label" id="lb-avatar"><img src="/imagei/photo.png"><br><input name="Avatar" id="avatar" type="file" accept="image/png, image/jpeg,image/gif,image/jpg" ></label>
                 <div id="show-photo" class="preview"><p>Chưa tải ảnh</p></div>
             
@@ -58,34 +58,40 @@ form p {
           <div class="form-group">
             <div class="col-sm-6">
           <input type="text" name="sdt" value="<%-sdt%>" hidden>
-              <div class="input number required"><label class="col-sm-3 control-label">Email:</label><input name="Email" class="form-control" placeholder="Xin vui lòng nhập email" type="email"  required="required" aria-required="true" aria-invalid="true"></div>	
+              <div class="input number required"><label class="col-sm-3 control-label">Email:</label><input name="Email" id="email" class="form-control" placeholder="Xin vui lòng nhập email" type="email"  required="required" aria-required="true" aria-invalid="true" onchange="checkEmail()"></div>	
                                             </div>
               </div>
+              <div id="email-error"></div>
               <div class="form-group">
                 <div class="col-sm-6">
-                  <div class="input password required">  <label class="col-sm-3 control-label">User name:</label><input name="username" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập tên tài khoản" data-rule-required="true" data-msg-required="Vui lòng nhập mật khẩu" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ và số" data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" id="username" required="required"/></div>										</div>
+                  <div class="input password required">  <label class="col-sm-3 control-label">User name:</label><input name="username" id="username" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập tên tài khoản" data-rule-required="true" data-msg-required="Vui lòng nhập mật khẩu" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ và số" data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" onchange="checkUsername()" required="required"/></div>										</div>
                 </div>
+                <div id="username-error"></div>
 
                 <div class="form-group">
                         <div class="col-sm-6">
-                          <div class="input number required"><label class="col-sm-3 control-label">First name:</label><input  name="First" class="form-control" placeholder="Xin vui lòng nhập first name" autofocus="autofocus" value="" data-rule-required="true" data-msg-required="Vui lòng nhập số điện thoại của bạn" data-rule-number="true" data-msg-number="Xin vui lòng nhập số" data-rule-minlength="10" data-msg-minlength="Số điện thoại từ 10 - 11 ký tự" data-rule-maxlength="11" data-msg-maxlength="Số điện thoại từ 10 - 11 ký tự" type="text"  required="required" aria-required="true" aria-invalid="true"></div>	
+                          <div class="input number required"><label class="col-sm-3 control-label">First name:</label><input  name="First" id="firstname" class="form-control" placeholder="Xin vui lòng nhập first name"  value="" data-rule-required="true" data-msg-required="Vui lòng nhập số điện thoại của bạn" data-rule-number="true" data-msg-number="Xin vui lòng nhập số" data-rule-minlength="10" data-msg-minlength="Số điện thoại từ 10 - 11 ký tự" data-rule-maxlength="11" data-msg-maxlength="Số điện thoại từ 10 - 11 ký tự" type="text"  required="required" aria-required="true" aria-invalid="true" onchange="checkFirstName()"></div>	
                                                         </div>
                           </div>
+                  <div id="firstname-error"></div>
                           <div class="form-group">
                             <div class="col-sm-6">
-                              <div class="input password required">  <label class="col-sm-3 control-label">Last name:</label><input name="Last" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập last name" data-rule-required="true" data-msg-required="Vui lòng nhập last name" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ " data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" id="last" required="required"/></div>										</div>
+                              <div class="input password required">  <label class="col-sm-3 control-label">Last name:</label><input name="Last" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập last name" data-rule-required="true" data-msg-required="Vui lòng nhập last name" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ " data-rule-minlength="6" data-msg-minlength="Mật khẩu tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength="Mật khẩu tối đa 30 ký tự" type="text" id="lastname" required="required" onchange="checkLastName()"/></div>										</div>
                             </div>
+                            <div id="lastname-error"></div>
                             <div class="form-group">
                                     <div class="col-sm-6">
-                                      <div class="input number required"><label class="col-sm-3 control-label">Adress:</label><input name="Address" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập địa chỉ" data-rule-required="true" data-msg-required="Vui lòng nhập địa chỉ" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ hoặc số" data-rule-minlength="6" data-msg-minlength=" tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength=" tối đa 30 ký tự" type="text" id="address" required="required"/></div>	
+                                      <div class="input number required"><label class="col-sm-3 control-label">Adress:</label><input name="Address" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập địa chỉ" data-rule-required="true" data-msg-required="Vui lòng nhập địa chỉ" data-rule-lettersonly="true" data-msg-lettersonly="Vui lòng chỉ nhập chữ hoặc số" data-rule-minlength="6" data-msg-minlength=" tối thiểu 6 ký tự" data-rule-maxlength="30" data-msg-maxlength=" tối đa 30 ký tự" type="text" id="address" required="required" onchange="checkAddress()"/></div>	
                                                                     </div>
                                       </div>
+                                      <div id="address-error"></div>
                                       <div class="form-group">
                                         <div class="col-sm-6">
-                                          <div class="input password required">  <label class="col-sm-3 control-label">City:</label><input name="City" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập thành phố"   type="text" id="city" required="required"/></div>										</div>
-                                        </div>                 
+                                          <div class="input password required">  <label class="col-sm-3 control-label">City:</label><input name="City" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập thành phố"   type="text" id="city" required="required" id="city" onchange="checkCity()"/></div>										</div>
+                                        </div>    
+                                    <div id="city-error"></div>             
                 
-                    <input id ="btdk" class="btn btn-default text-right" type="submit" value="Cập nhật thông tin	">									
+                    <input id ="btdk" style="margin-top:15px" class="btn btn-default text-right" type="submit" value="Cập nhật thông tin	" onclick="checkSubmit()">									
               
                     </form>									</div>
               </div>
@@ -128,7 +134,132 @@ function validFileType(file) {
   }
   return false;
 }
+function checkEmail(){
+  
+  if(document.getElementById("email").value.length == 0){
+    document.getElementById("email-error").innerHTML="Bạn chưa nhập Email!";
+    document.getElementById("email-error").style.color ="red";
+  }else{
+    var count = 0;
+    for(var i=0; i<document.getElementById("email").value.length; i++){
+    if(document.getElementById("email").value.substring(i,i+1).indexOf('@') != -1) count++;
+  }
 
+  if(count == 0){
+    document.getElementById("email-error").innerHTML="Email phải chứa kí tự @!";
+    document.getElementById("email-error").style.color ="red";
+    
+  }
+  if(count > 1){
+    document.getElementById("email-error").innerHTML="Email chỉ chứa 1 kí tự @!";
+    document.getElementById("email-error").style.color ="red";
+    
+  }
+  if(count == 1){
+    document.getElementById("email-error").innerHTML="";
+    
+  }
+  }
+ 
+}
+
+  // check username
+  function checkUsername(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+    for(var i=0; i<document.getElementById("username").value.length; i++){
+      var temp = document.getElementById("username").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("username-error").innerHTML = "Tên tài khoản chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu gạch dưới!"
+        document.getElementById("username-error").style.color = "red";
+       
+      }else{
+        document.getElementById("username-error").innerHTML = "";
+        
+      }
+    }
+  }
+
+  // check first name
+  function checkFirstName(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+    for(var i=0; i<document.getElementById("firstname").value.length; i++){
+      var temp = document.getElementById("firstname").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("firstname-error").innerHTML = "Tên tài khoản chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu gạch dưới!"
+        document.getElementById("firstname-error").style.color = "red";
+      
+      }else{
+        document.getElementById("firstname-error").innerHTML = "";
+        
+      }
+    }
+  }
+
+   // check last name
+   function checkLastName(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+    for(var i=0; i<document.getElementById("lastname").value.length; i++){
+      var temp = document.getElementById("lastname").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("lastname-error").innerHTML = "Tên tài khoản chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu gạch dưới!"
+        document.getElementById("lastname-error").style.color = "red";
+     
+      }else{
+        document.getElementById("lastname-error").innerHTML = "";
+    
+      }
+    }
+  }
+
+  // check address
+  function checkAddress(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890, ";
+    for(var i=0; i<document.getElementById("address").value.length; i++){
+      var temp = document.getElementById("address").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("address-error").innerHTML = "Tên địa chỉ chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu phẩy!"
+        document.getElementById("address-error").style.color = "red";
+        
+      }else{
+        document.getElementById("address-error").innerHTML = "";
+      
+      }
+    }
+  }
+
+  // check address
+  function checkCity(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+    for(var i=0; i<document.getElementById("city").value.length; i++){
+      var temp = document.getElementById("city").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("city-error").innerHTML = "Tên địa chỉ chỉ được chứa chữ cái viết hoa, viết thường!"
+        document.getElementById("city-error").style.color = "red";
+     
+      }else{
+        document.getElementById("city-error").innerHTML = "";
+      
+      }
+    }
+  }
+
+  // check submit
+  // function check(){
+  //   var checkemail = checkEmail();
+  //   var checkusername = checkUsername();
+  //   var checkfirstname = checkFirstName();
+  //   var checklastname = checkLastName();
+  //   var checkaddress = checkAddress();
+  //   var checkcity = checkCity();
+
+  //   if(!checkmail) {alert("Email chưa hợp lệ!"); return false;}
+  //   if(!checkusername) {alert("Username chưa hơp lệ!");return false;}
+  //   if(!checkfirstname){ alert("firstname chưa hơp lệ!");return false;}
+  //   if(!checklastname) {alert("Lastrname chưa hơp lệ!");return false;}
+  //   if(!checkaddress){ alert("Address chưa hơp lệ!");return false;}
+  //   if(!checkcity){ alert("City chưa hơp lệ!");return false;}
+  //   return true;
+  // }
 </script>
 <% include template/footer %>
 <% include template/body2 %>

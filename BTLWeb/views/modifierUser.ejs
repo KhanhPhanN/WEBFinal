@@ -164,29 +164,35 @@
                     </tr>
                     <tr>
                             <th>First Name :</th>
-                            <td> <input type="text" name="firstname" id="name" class="input-info" value="<%=data.firstname %>">
+                            <td> <input type="text" name="firstname" id="firstname" class="input-info" value="<%=data.firstname %>" onchange="checkFirstName()">
                             </td>
+                            <td id="firstname-error"></td>
                         </tr>
+                        
                         <tr>
                             <th>Last Name :</th>
-                            <td> <input type="text" name="lastname" id="name" class="input-info" value="<%=data.lastname %>">
+                            <td> <input type="text" name="lastname" id="lastname" class="input-info" value="<%=data.lastname %>" onchange="checkLastName()">
                             </td>
+                            <td id="lastname-error"></td>
                         </tr>
                       <tr>
                                 <th>Email :</th>
-                                <td> <input type="text" name="email" id="email" class="input-info" value="<%=data.email %>">
+                                <td> <input type="text" name="email" id="email" class="input-info" value="<%=data.email %>" onchange="checkEmail()">
                                 </td>
+                                <td id="email-error"> </td>
                        </tr>
                        <tr>
                         <th>Địa chỉ:</th>
-                        <td> <input type="text" name="address" id="name" class="input-info" value="<%=data.address %>">
+                        <td> <input type="text" name="address" id="address" class="input-info" value="<%=data.address %>" onchange="checkAddress()">
                         </td>
+                        <td id="address-error"> </td>
                     </tr>
 
                     <tr>
                         <th>Thành phố:</th>
-                        <td> <input type="text" name="city" id="name" class="input-info" value="<%=data.city %>">
+                        <td> <input type="text" name="city" id="city" class="input-info" value="<%=data.city %>" onchange="checkCity()">
                         </td>
+                        <td id="city-error"> </td>
                     </tr>
                 </table><hr>
                   <input type="submit" value="Cập nhật" id="update-user">
@@ -205,3 +211,69 @@
 </div>
 <% include template/body2 %>
 
+<script>
+  // check first name
+  function checkFirstName(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+    for(var i=0; i<document.getElementById("firstname").value.length; i++){
+      var temp = document.getElementById("firstname").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("firstname-error").innerHTML = "Tên tài khoản chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu gạch dưới!"
+        document.getElementById("firstname-error").style.color = "red";
+      
+      }else{
+        document.getElementById("firstname-error").innerHTML = "";
+        
+      }
+    }
+  }
+
+   // check last name
+   function checkLastName(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+    for(var i=0; i<document.getElementById("lastname").value.length; i++){
+      var temp = document.getElementById("lastname").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("lastname-error").innerHTML = "Tên tài khoản chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu gạch dưới!"
+        document.getElementById("lastname-error").style.color = "red";
+     
+      }else{
+        document.getElementById("lastname-error").innerHTML = "";
+    
+      }
+    }
+  }
+
+  // check address
+  function checkAddress(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890, ";
+    for(var i=0; i<document.getElementById("address").value.length; i++){
+      var temp = document.getElementById("address").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("address-error").innerHTML = "Tên địa chỉ chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu phẩy!"
+        document.getElementById("address-error").style.color = "red";
+        
+      }else{
+        document.getElementById("address-error").innerHTML = "";
+      
+      }
+    }
+  }
+
+  // check address
+  function checkCity(){
+    var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+    for(var i=0; i<document.getElementById("city").value.length; i++){
+      var temp = document.getElementById("city").value.substring(i,i+1);
+      if(ascii.indexOf(temp) == -1){
+        document.getElementById("city-error").innerHTML = "Tên địa chỉ chỉ được chứa chữ cái viết hoa, viết thường!"
+        document.getElementById("city-error").style.color = "red";
+     
+      }else{
+        document.getElementById("city-error").innerHTML = "";
+      
+      }
+    }
+  }
+
+    </script>

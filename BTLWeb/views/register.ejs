@@ -14,13 +14,15 @@
     </div>
     <div class="form-group">
       <div class="col-sm-6">
-        <div class="input number required"><label class="col-sm-3 control-label">Số điện thoại:</label><input id="input" name="PhoneNumber" class="form-control" placeholder="Xin vui lòng nhập số điện thoại" autofocus="autofocus"  type="number"  required="required" ></div>	
+        <div class="input number required"><label class="col-sm-3 control-label">Số điện thoại:</label><input id="input" name="PhoneNumber" class="form-control" placeholder="Xin vui lòng nhập số điện thoại" autofocus="autofocus"  type="number"  required="required" onkeyup="checkPhone()" ></div>	
                       </div>
         </div>
+        <div id="phone-error"> </div>
         <div class="form-group">
           <div class="col-sm-6">
-            <div class="input password required">  <label class="col-sm-3 control-label">Mật khẩu:</label><input name="password" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập mật khẩu" type="password" id="password" required="required"/></div>										</div>
+            <div class="input password required">  <label class="col-sm-3 control-label">Mật khẩu:</label><input name="password" class="form-control" maxlength="30" placeholder="Xin vui lòng nhập mật khẩu" type="password" id="password" required="required" onkeyup ="checkPass()"/></div>										</div>
           </div>
+          <div id="error"> </div>
           <div class="form-group">
             <div class="col-sm-6 col-sm-offset-3">
               <div class="">
@@ -41,3 +43,45 @@
         </div>
 <% include template/footer %>
 <% include template/body2 %>
+<script>
+    // check password
+    var ascII = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    function checkPass(){
+      if(document.getElementById("password").value.length == 0){
+        document.getElementById("error").innerHTML = "Bạn chưa nhập mật khẩu!";
+        document.getElementById("error").style.color = "red";
+      }
+      if(document.getElementById("password").value.length < 6){
+        document.getElementById("error").innerHTML = "Mật khẩu phải lớn hơn 6 kí tự!";
+        document.getElementById("error").style.color = "red";
+      }else{
+        document.getElementById("error").innerHTML = "";
+        for(var i=0; i<document.getElementById("password").value.length; i++){
+          var temp = document.getElementById("password").value.substring(i,i+1);
+          if(ascII.indexOf(temp) == -1){
+            document.getElementById("error").innerHTML = "Mật khẩu chỉ được chứa chữ cái viết hoa, viết thường hoặc số!";
+        document.getElementById("error").style.color = "red";
+          }
+        }
+      }
+    }
+
+    //check phonenumber
+    var number="0123456789";
+    function checkPhone(){
+      if(document.getElementById("input").value.length != 10 &&  document.getElementById("input").value.length != 11){
+        document.getElementById("phone-error").innerHTML = "Số điện thoại chỉ được chứa 10 hoặc 11 chữ số!";
+        document.getElementById("phone-error").style.color = "red";
+      }else{
+        document.getElementById("phone-error").innerHTML = "";
+        for(var i=0; i<document.getElementById("input").value.length; i++){
+          var temp = document.getElementById("input").value.substring(i,i+1);
+          if(number.indexOf(temp) == -1){
+            document.getElementById("phone-error").innerHTML = "Số điện thoại chỉ được chứa chữ số!";
+        document.getElementById("phone-error").style.color = "red";
+          }
+        }
+      }
+    }
+
+  </script>

@@ -58,17 +58,32 @@
        
                     <% if(kq.length==0){%>
                      <h2>Không tìm thấy thông tin </h2>
-                  <% } else {  kq.forEach((data)=>{%>
+                  <% } else { kq.forEach((data)=>{%>
                     <form method="POST" action="/user/modifier/<%-data.username%>" enctype="multipart/form-data" >
                     <table id="info-user">
                             <input  type="text" name="phonenumber" value="<%= data.PhoneNumber%>" hidden>
                     <tr><td colspan="2"><label class="user-in"><img src="/upload/<%= data.avatar%>" width="80px" height="80px"></label><div class="user-out" id="avatar-update-1"><input  name="avatar" id="avatar-update" type="file" accept="image/png, image/jpeg,image/gif,image/jpg"></div><div class="user-out" id="preview">Chưa tải ảnh</div><%= data.username%></td> </tr>
-                    <tr><td><b>First Name:</b></td><td><label class="user-in"><%= data.firstname%></label><input class="user-out" type="text" name="firstname" value="<%= data.firstname%>"></td></tr>
-                    <tr><td><b>Last Name:</b></td><td> <label class="user-in"><%= data.lastname%></label><input class="user-out" type="text" name="lastname" value="<%= data.lastname%>"></td> </tr>
-                    <tr><td><b>Email:</b></td><td><label class="user-in"> <%= data.email%></label><input class="user-out" type="text" name="email" value="<%= data.email%>"></td> </tr>   
+
+                    <tr><td><b>First Name:</b></td><td><label class="user-in"><%= data.firstname%></label><input class="user-out" type="text" name="firstname" id="firstname" value="<%= data.firstname%>" onchange="checkFirstName()"></td>
+                        <td id="firstname-error"></td>
+                    </tr>
+
+                    <tr><td><b>Last Name:</b></td><td> <label class="user-in"><%= data.lastname%></label><input class="user-out" type="text" name="lastname" id="lastname" value="<%= data.lastname%>" onchange="checkLastName()"></td>
+                        <td id="lastname-error"></td> </tr>
+
+                    <tr><td><b>Email:</b></td><td><label class="user-in"> <%= data.email%></label><input class="user-out" type="text" name="email" id="email" onchange="checkEmail()" value="<%= data.email%>"></td>
+                        <td id="email-error"></td>
+                     </tr> 
+
                     <tr><td><b>Số điện thoại:</b></td><td><label class="user-in"><%= data.PhoneNumber%></label><input class="user-out" type="text" name="phonenumbershow" value="<%= data.PhoneNumber%>" disabled></td> </tr>
-                    <tr><td><b>Địa chỉ:</b></td><td><label class="user-in"><%= data.address%></label><input class="user-out" type="text" name="address" value="<%= data.address%>"></td> </tr>
-                    <tr><td><b>Thành Phố:</b></td><td><label class="user-in"><%= data.city%></label><input class="user-out" type="text" name="city" value="<%= data.city%>"></td> </tr>
+
+                    <tr><td><b>Địa chỉ:</b></td><td><label class="user-in"><%= data.address%></label><input class="user-out" type="text" name="address" id="address" onchange="checkAddress()" value="<%= data.address%>"></td> 
+                        <td id="address-error"> </td>
+                    </tr>
+
+                    <tr><td><b>Thành Phố:</b></td><td><label class="user-in"><%= data.city%></label><input class="user-out" type="text" id="city" name="city" value="<%= data.city%>" onchange="checkCity()"></td> 
+                        <td id="city-error"> </td>
+                    </tr>
                 </table>
                     <input type="button" id="modifier-user" class="modifier-user" value="Chỉnh sửa thông tin">
                     <a href="/user/changePassword"> <input type="button" class="modifier-user" id="change-password" value="Thay đổi mật khẩu"></a>
@@ -152,5 +167,68 @@
           return false;
         }
         
+        // check first name
+    function checkFirstName(){
+          var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+          for(var i=0; i<document.getElementById("firstname").value.length; i++){
+            var temp = document.getElementById("firstname").value.substring(i,i+1);
+            if(ascii.indexOf(temp) == -1){
+              document.getElementById("firstname-error").innerHTML = "Tên tài khoản chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu gạch dưới!"
+              document.getElementById("firstname-error").style.color = "red";
+            
+            }else{
+              document.getElementById("firstname-error").innerHTML = "";
+              
+            }
+          }
+        }
+      
+         // check last name
+         function checkLastName(){
+          var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_ ";
+          for(var i=0; i<document.getElementById("lastname").value.length; i++){
+            var temp = document.getElementById("lastname").value.substring(i,i+1);
+            if(ascii.indexOf(temp) == -1){
+              document.getElementById("lastname-error").innerHTML = "Tên tài khoản chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu gạch dưới!"
+              document.getElementById("lastname-error").style.color = "red";
+           
+            }else{
+              document.getElementById("lastname-error").innerHTML = "";
+          
+            }
+          }
+        }
+      
+        // check address
+        function checkAddress(){
+          var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890, ";
+          for(var i=0; i<document.getElementById("address").value.length; i++){
+            var temp = document.getElementById("address").value.substring(i,i+1);
+            if(ascii.indexOf(temp) == -1){
+              document.getElementById("address-error").innerHTML = "Tên địa chỉ chỉ được chứa chữ cái viết hoa, viết thường, số,dấu cách hoặc dấu phẩy!"
+              document.getElementById("address-error").style.color = "red";
+              
+            }else{
+              document.getElementById("address-error").innerHTML = "";
+            
+            }
+          }
+        }
+      
+        // check address
+        function checkCity(){
+          var ascii = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ";
+          for(var i=0; i<document.getElementById("city").value.length; i++){
+            var temp = document.getElementById("city").value.substring(i,i+1);
+            if(ascii.indexOf(temp) == -1){
+              document.getElementById("city-error").innerHTML = "Tên địa chỉ chỉ được chứa chữ cái viết hoa, viết thường!"
+              document.getElementById("city-error").style.color = "red";
+           
+            }else{
+              document.getElementById("city-error").innerHTML = "";
+            
+            }
+          }
+        }
         </script>
         
