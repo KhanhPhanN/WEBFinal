@@ -294,16 +294,23 @@ $("#dangki").click(function(){
     $("#container_inner_nav").hide()
 })
 // POST đăng kí
+
 $("#btdk").click(function(){
-$.post("/signup",{PhoneNumber: $("#input").val(), password: $("#password").val()},function(data,status){
-if(data.code=="5"){
-    alert(data.data);
- 
-}
-else{
-    window.location.href = "/sms_verify";
-}
-})
+    var check1 = checkPhoneNumber($("#input").val());
+    var check2 = checkPassword($("#password").val());
+    if((check1 != 0) || (check2 != 0)) alert("Dữ liệu đầu vào chưa hợp lệ!");
+    else{
+        $.post("/signup",{PhoneNumber: $("#input").val(), password: $("#password").val()},function(data,status){
+            if(data.code=="5"){
+                alert(data.data);
+             
+            }
+            else{
+                window.location.href = "/sms_verify";
+            }
+            })
+    }
+
 })
 
 
@@ -319,10 +326,33 @@ if(data.code=="5"){
 }
     })
 })
+// update login 
+$("#btcn").click(function(){
+    var check1 = checkEmail($("#email").val());
+    var check2 = checkInput($("#username").val());
+    var check3 = checkInput($("#firstname").val());
+    var check4 = checkInput($("#lastname").val());
+    var check5 = checkInput($("#address").val());
+    var chech6 = checkInput($("#city").val());
+    if((check1) || (check2) || (check3) || (check4) || (check5) || (check6)) 
+    alert("Dữ liệu đầu vào chưa hợp lệ!");
+    // else{
+    //     $.post("/update_register",{})
+    // }
+})
+
+// login
+$("#btdn").click(function(){
+    var check1 = checkPhoneNumber($("#input").val());
+    var check2 = checkPassword($("#password").val());
+    if(check1 || check2)
+    alert("Dữ liệu đầu vào chưa hợp lệ!");
+})
+
 //Quên mật khẩu
 $("#btfg").click(function(){
     $.post("/create_code_reset_password",{phonenumber: $("#input").val()},function(data,status){
-    if(data.code=="1005"){
+    if(data.code=="1005"){,
    alert(data.data);
     }
     else{
@@ -351,28 +381,57 @@ $("#btfg").click(function(){
 
 
 $("#btcp").click(function(){
-    $.post("/changePassword",{id: $("#p-change").val(),oldPassword: $("#input").val(),newPassword: $("#password").val(),newPassword2: $("#password2").val()},function(data,status){
-    if(data.code=="5"){
-        $("#err-fg").html("");
-        for(var i=0;i<data.data.length;i++)
-      { var err="<p>"+data.data[i]+"</p><br>"
-       $("#err-fg").append(err);
-    }
-    }
+    var check1 = checkPassword($("#password").val());
+    var check2 = checkPassword($("#password2").val());
+    if(check1 || check2)  alert("Dữ liệu đầu vào chưa hợp lệ!");
     else{
-        window.location.href = "/";
+        $.post("/changePassword",{id: $("#p-change").val(),oldPassword: $("#input").val(),newPassword: $("#password").val(),newPassword2: $("#password2").val()},function(data,status){
+            if(data.code=="5"){
+                $("#err-fg").html("");
+                for(var i=0;i<data.data.length;i++)
+              { var err="<p>"+data.data[i]+"</p><br>"
+               $("#err-fg").append(err);
+            }
+            }
+            else{
+                window.location.href = "/";
+            }
+            })
     }
     })
-    })
+// update user information
+$("#modifier-user-1").click(function(){
+    var check1 = checkEmail($("#email").val());
+    var check2 = checkInput($("#username").val());
+    var check3 = checkInput($("#firstname").val());
+    var check4 = checkInput($("#lastname").val());
+    var check5 = checkInput($("#address").val());
+    var chech6 = checkInput($("#city").val());
+    if((check1) || (check2) || (check3) || (check4) || (check5) || (check6)) 
+    alert("Dữ liệu đầu vào chưa hợp lệ!");
+})
+
+// them san pham
+$("#add").click(function(){
+    var check1 = checkInput($("#textinput").val());
+    var check2 = checkInput($("#textarea").val());
+    if(check1 || check2) alert("Dữ liệu đầu vào chưa hợp lệ!");
+})
+
 
 // Chỉnh sửa product
 var x = {nameproduct: $("#textinput").val(), describleproduct: $("#textarea").val(), bargainproduct1: $("#bargainproduct1").val(), bargainproduct2: $("#bargainproduct2").val(), bargainproduct3: $("#bargainproduct3"), attached: $("#product-category-name").val(), state: $("#product-category-state").val(), label: $("#product-category-label").val(), weight: $("#product-category-weight").val(), sell: $("#product-place-sell").val(), price: $("#product-price-input").val(), filename: $("#filename").val()}
 console.log(x)
+
   $("#edit_product").click(function(){
-    
-      $.post("/edit_products",{nameproduct: $("#textinput").val(), describleproduct: $("#textarea").val(), bargainproduct1: $("#bargainproduct1").val(), bargainproduct2: $("#bargainproduct2").val(), bargainproduct3: $("#bargainproduct3").val(), attached: $("#product-category-name").val(), state: $("#product-category-state").val(), label: $("#product-category-label").val(), weight: $("#product-category-weight").val(), sell: $("#product-place-sell").val(), price: $("#product-price-input").val(), filename: $("#filename").val()},function(data, status){
-alert(data.data);
-  })
+    var check1 = checkInput($("#textinput").val());
+var check2 = checkInput($("#textarea").val());
+if(check1 || check2) alert("Dữ liệu đầu vào chưa hợp lệ!");
+else{
+    $.post("/edit_products",{nameproduct: $("#textinput").val(), describleproduct: $("#textarea").val(), bargainproduct1: $("#bargainproduct1").val(), bargainproduct2: $("#bargainproduct2").val(), bargainproduct3: $("#bargainproduct3").val(), attached: $("#product-category-name").val(), state: $("#product-category-state").val(), label: $("#product-category-label").val(), weight: $("#product-category-weight").val(), sell: $("#product-place-sell").val(), price: $("#product-price-input").val(), filename: $("#filename").val()},function(data, status){
+        alert(data.data);
+          })
+}
   })
 
 
@@ -397,41 +456,90 @@ function  mota(){
     $("#mota-title").css("color","#f16e8e")
     $("#binhluan-title").css("color","black")
 }
-function checkPhoneNumber() {
-    var flag = false;
-    var phone = $('#input').val().trim(); // ID của trường Số điện thoại
-    phone = phone.replace('(+84)', '0');
-    phone = phone.replace('+84', '0');
-    phone = phone.replace('84', '0');
-    phone = phone.replace('0084', '0');
-    phone = phone.replace(/ /g, '');
-    if (phone != '') {
-        var firstNumber = phone.substring(0, 2);
-        if ((firstNumber == '09' || firstNumber == '08'|| firstNumber == '03') && phone.length == 10) {
-            if (phone.match(/^\d{10}/)) {
-                return true;
-            }
-        } else if (firstNumber == '01' && phone.length == 11) {
-            if (phone.match(/^\d{11}/)) {
-                return true;
-            }
+
+
+var ascII ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+// viet ham check password nhap vao
+function checkPassword(temp){
+    if(temp.length < 6) return 1;//"Mật khẩu phải lớn hơn hoặc bằng 6 kí tự";
+    else{
+        for(var i=0; i<temp.length; i++){
+            var check = temp.substring(i,i+1);
+            if(ascII.indexOf(check) == -1)
+            return  2;//"Mật khẩu chỉ được chứa chữ cái viết hoa,viết thường hoặc số";
         }
     }
-    return flag;
+    return 0;
 }
-function checkPassword(){
-    var password=$('#UserPassword').val().trim();
-    var w = /[a-zA-Z0-9]+/ ;
-    if(password!=""){
-        if(password.length<6){
-            alert("Mật khẩu phải lớn hơn 6 kí tự")
-         return false
-        }else{
-            if(!password.match(w)){
-                alert("Mật khẩu chỉ chứa chữ hoặc số")
-                return false
-            }
-        }
+var ascii ="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-:()%., áàạảãâấầậẩẫăắằặẳẵÁÀẠẢÃÂẤẦẬẨẪĂẮẰẶẲẴéèẹẻẽêếềệểễÉÈẸẺẼÊẾỀỆỂỄóòọỏõôốồộổỗơớờợởỡÓÒỌỎÕÔỐỒỘỔỖƠỚỜỢỞỠúùụủũưứừựửữÚÙỤỦŨƯỨỪỰỬỮíìịỉĩÍÌỊỈĨđĐýỳỵỷỹÝỲỴỶỸ\r\n\r\n"
+// viet ham check input va text area nhap vao
+function checkInput(temp){
+    if(temp){
+    for(var i=0; i<temp.length; i++){
+        var check = temp.substring(i,i+1);
+        var x ="."
+        if((ascii.indexOf(check) == -1 )) 
+       {
+           console.log("Vị trí "+i+" Phần tử: "+check);
+            return  1;//"input chỉ được chứa chữ cái viết hoa,viết thường hoặc số";
+       }
     }
-    return true;
+    return 0;
+}else{
+    return 1;
+}
+}
+
+
+function checkEmail(email){
+  
+    if(email.length == 0){
+      return 1;
+    }else{
+      var count = 0;
+      for(var i=0; i<email.length; i++){
+      if(email.substring(i,i+1).indexOf('@') != -1) count++;
+    }
+  
+    if(count == 0){
+     return 1;  
+    }
+    if(count > 1){
+     return 1;   
+    }
+    if(count == 1){
+      return 0;    
+    }
+    } 
+  }
+
+//Check phone
+var number="0123456789";
+  function checkPhoneNumber(phone){
+    if(phone.length != 10 &&  phone.length != 11){
+      return 1;
+    }else{
+      for(var i=0; i<phone.length; i++){
+        var temp = phone.substring(i,i+1);
+        if(number.indexOf(temp) == -1){
+          return 1;
+        }
+      }
+    }
+    return 0;
+  }
+
+//check vode
+
+function checkCode(code){
+var inclu = "1234567890";
+if(code.length!=4){
+    return 1;
+}else{
+for(var i=0;i<4;i++){
+    if(inclu.indexOf(code[i])==-1)
+    return 1
+}
+}
+return 0;
 }

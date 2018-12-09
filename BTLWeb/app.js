@@ -369,6 +369,7 @@ MongoClient.connect(url,function(err,db){
 var phoneInput;
 app.post('/create_code_reset_password',function(req,res){
  phoneInput = req.body.phonenumber;
+ console.log(phoneInput);
  var checkphone = checkPhoneNumber(phoneInput);
  if(checkphone!=0){
     res.json({code: "1005", message:"Unknown error", data: "Số điện thoại không đúng"})
@@ -381,6 +382,7 @@ app.post('/create_code_reset_password',function(req,res){
             res.json({code: "1001", message: "Can not connect to DB"})
         }else{
             dbo.collection('users').find({PhoneNumber:phoneInput}).toArray(function(err,user){
+                console.log(user);
                 if(err) throw err;
                 if(user.length > 0){
                     var text = parseInt(Math.random()*(9999-1000)+1000);
